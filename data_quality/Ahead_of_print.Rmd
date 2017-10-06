@@ -1,0 +1,29 @@
+---
+title: "Epub ahead of print"
+author: "Greta Linder"
+output: html_document
+date:  '`r format(Sys.time(), "%d %B, %Y")`'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+Sammanställning av artiklar som i DiVA är registrerade som Epub ahead of print. Behöver kontrolleras om de fått placering i voym och nummer.
+```{r, include=FALSE}
+library(tidyverse)
+library(stringr)
+
+#Hämta DiVA-data. Forskningspublikationer (alla). ÄNDRA
+diva <- read_csv(file = "/home/shub/assets/diva/diva_researchpubl_sh_latest.csv")
+
+#Uraval av publikationer efter status
+ahead_of_print <- diva %>%
+  subset(Status == "aheadofprint") %>%
+  select(PID, DOI) %>%
+  transmute(PID, link = str_c("https://doi.org/", DOI))
+
+```
+
+```{r , echo=FALSE, results='asis'}
+knitr::kable(ahead_of_print) 
+```
