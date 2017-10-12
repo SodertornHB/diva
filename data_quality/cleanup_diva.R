@@ -1,7 +1,7 @@
 #
 #
 #
-#Städa i DiVA
+#cleanup_diva
 #170921 GL
 #Olika skript som sammanställer poster som behöver åtgärdas i DiVA. 
 #Innehåller: Ahead of print, Ej granskningsmärkta, Manuskript i sammanläggningsavhandlingar, Sidor saknas i kapitel
@@ -13,7 +13,7 @@ library(tidyverse)
 library(stringr)
 
 #Läs in data från DiVA. Vi använder en csvall2-fil.
-diva <- read_csv(file = "/home/shub/assets/diva/diva_researchpubl_sh_latest.csv")
+diva <- read_csv(file = "/home/shub/assets/diva/diva_researchpubl_latest.csv")
 
 
 # Ahead of print ----------------------------------------------------------
