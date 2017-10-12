@@ -13,8 +13,8 @@ Sammanställning av artiklar som i DiVA är registrerade som Epub ahead of print
 library(tidyverse)
 library(stringr)
 
-#Hämta DiVA-data. Forskningspublikationer (alla). ÄNDRA
-diva <- read_csv(file = "/home/shub/assets/diva/diva_researchpubl_sh_latest.csv")
+#Hämta DiVA-data. Forskningspublikationer (alla).
+diva <- read_csv(file = "/home/shub/assets/diva/diva_researchpubl_latest.csv")
 
 #Uraval av publikationer efter status
 ahead_of_print <- diva %>%

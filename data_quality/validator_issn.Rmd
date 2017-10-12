@@ -1,0 +1,19 @@
+---
+title: "ISSN Validator"
+output:
+  pdf_document:
+    latex_engine: xelatex
+  html_document: default
+  word_document: default
+classoption: landscape
+---
+
+```{r echo=FALSE}
+
+load("validator_issn.RData")
+library(pander)
+panderOptions('table.split.table', Inf)
+pander(diva_malformed_issn, justify=c('center', 'left', 'center', 'left', 'left', 'left', 'left'))
+```
+
+
