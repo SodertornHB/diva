@@ -1,0 +1,65 @@
+---
+title: "Registreringar i DiVA"
+author: "Greta Linder"
+date: '`r format(Sys.time(), "%d %B, %Y")`'
+output: pdf_document
+classoption: landscape
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Registreringar i DiVA för Södertörns högskola
+
+Antalet registreringar i DiVA och hur många av dessa som innehåller en fulltext. Året är publikationens publiceringsår.
+
+```{r, include=FALSE}
+library(tidyverse)
+
+#Antal forskningspublikationer registrerade i DiVA.
+forskningspub <- read_csv("/home/shub/assets/diva/diva_researchpubl_latest.csv")
+
+```
+
+```{r forskningspub, echo=FALSE}
+
+#Äldre publikationer med fulltext
+retro <- forskningspub %>%
+  filter(Year <= 1999) %>%
+  subset(FullTextLink != "")
+
+#retrofull <- subset(retro, FullTextLink!="")
+retrofull <- nrow(retro)
+oldest <- min(retro$Year)
+
+#Antal registreringar och antal fulltext
+forskpub <- forskningspub %>%
+  filter(Year >= 2000)
+registreringar <- table(forskpub$Year)
+fulltext <- table(forskpub$FullTextLink!="", forskpub$Year)
+forsktab <- rbind(registreringar, fulltext) #Utvecklingspotential
+
+knitr::kable(forsktab, caption = "Forskningspublikationer")
+```
+
+Det finns även `r retrofull` retroaktiva fulltexter inlagda av forskare. Den äldsta från `r oldest`.
+```{r, include=FALSE}
+
+#Antal uppsatser registrerade i DiVA och antal fulltexter
+uppsat <- read_csv(file="/home/shub/assets/diva/diva_studentessays_latest.csv")
+```
+
+```{r uppsatser, echo=FALSE}
+
+uppsatser <- table(uppsat$Year)
+uppfull <- table(uppsat$FullTextLink!="", uppsat$Year)
+uppsatstabell <- rbind(uppsatser, uppfull)
+
+knitr::kable(uppsatstabell, caption = "Uppsatser")
+
+```
+
+
+
+
