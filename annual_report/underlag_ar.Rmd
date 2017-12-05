@@ -1,11 +1,10 @@
 ---
-mainfont: DejaVu Serif
 fontsize: 12pt
 geometry: textheight=500pt
 header-includes: 
   \usepackage{fancyhdr}
   \usepackage{datetime}
-  \newdateformat{myformat}{\THEYEAR\THEMONTH\THEDAY}
+  \newdateformat{myformat}{\THEYEAR-\twodigit{\THEMONTH}-\twodigit{\THEDAY}}
   \pagestyle{fancy} 
   \fancyhf{}
   \addtolength{\headheight}{3cm}
@@ -31,6 +30,17 @@ sh_archive_start("Årsredovisning")
 diva <- read_csv(file="/home/shub/assets/diva/diva_researchpubl_sh_latest.csv")
 diva <- diva %>% filter(between(Year, 2013, 2016))
 ```
+
+```{r filter, echo=FALSE}
+#De publikationer som skall ingå i sammanställningen
+divaAR <- diva %>% 
+  filter(!(PublicationType == "Samlingsverk (redaktörskap)"|PublicationType == "Proceedings (redaktörskap)" |PublicationType == "Övrigt")) %>%
+  filter(ContentType!="Övrig (populärvetenskap, debatt, mm)") %>%
+  filter((is.na(Status))|Status=="published") %>%
+  filter(is.na(PublicationSubtype)|PublicationSubtype == "publishedPaper" |PublicationSubtype == "meetingAbstract" 
+         |PublicationSubtype == "editorialMaterial")
+```
+
 ```{r ahead, echo=FALSE}
 #Antal artiklar med status Ahead of print
 ahead <- nrow(subset(diva, Status == "aheadofprint"))
@@ -40,25 +50,17 @@ ahead <- nrow(subset(diva, Status == "aheadofprint"))
 rev <- nrow(subset(diva, Reviewed =="false"))
 ```
 # Underlag från DiVA till årsredovisningen
-Uttaget från Södertörns högskolas pubikationsdatabas DiVA är gjort `r Sys.Date()`
+Uttaget från Södertörns högskolas pubikationsdatabas DiVA är gjort `r Sys.Date()` Antalet publikationer är uppdaterat för samtliga år.
 
-För att endast räkna den vetenskapliga publiceringen med anknytning till högskolan görs ett urval.
-Endast publikationer som är publicerade eller "In press" är medräknade. `r ahead` artiklar med status "Epub ahead of print" är inte medräknade.
-Publikationstyperna "Redaktörskap (Proceedings och Samlingsverk)" och "Övrigt" är inte medräknade.
-För konferensbidrag räknas endast publiserat paper (dvs alla andra underkategorier räknas bort).
+För att endast räkna den vetenskapliga publiceringen med anknytning till högskolan görs ett urval.  
+Endast publikationer som är publicerade eller *In press* är medräknade. `r ahead` artiklar med status *Epub ahead of print* är inte medräknade. Publikationstyperna *Samlingsverk (redaktörskap)*, *Proceedings(redaktörskap)* och *Övrigt* är inte medräknade.
+För *Konferensbidrag* räknas endast *Publiserat paper* (dvs alla andra underkategorier räknas bort).
 
 `r rev` publikationer som ännu inte granskats av bibliotekarie är medräknade. 
 
 Tabellerna till årsredovisningen finns i bifogad fil.
 
 ```{r, include=FALSE}
-#De publikationer som skall ingå i sammanställningen
-divaAR <- diva %>% 
-  filter(!(PublicationType == "Samlingsverk (redaktörskap)"|PublicationType == "Proceedings (redaktörskap)" |PublicationType == "Övrigt")) %>%
-  filter(ContentType!="Övrig (populärvetenskap, debatt, mm)") %>%
-  filter((is.na(Status))|Status=="published") %>%
-  filter(is.na(PublicationSubtype)|PublicationSubtype == "publishedPaper")
-
 #Slå ihop publikationstyper genom att byta namn på värden
 divaAR$PublicationType <- recode(divaAR$PublicationType,
                                         "Artikel i tidskrift" = "Artiklar i tidskrift",
@@ -113,4 +115,4 @@ sh_archive_end()
 # Bakgrund
 DiVA har använts som publikationsdatabas vid Södertörns högskola sedan 2011 och innehåller publikationer från 2000
 och framåt. Sedan hösten 2011 har det gått att markera andra publikationer än artiklar som refereed. Sedan
-februari 2013 finns underkategorier till publikationstyperna Artikel i tidskrift och Konferensbidrag.
+februari 2013 finns underkategorier till publikationstyperna *Artikel i tidskrift* och *Konferensbidrag*.

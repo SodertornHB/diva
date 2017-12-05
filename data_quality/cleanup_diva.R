@@ -4,7 +4,8 @@
 #cleanup_diva
 #170921 GL
 #Olika skript som sammanställer poster som behöver åtgärdas i DiVA. 
-#Innehåller: Ahead of print, Ej granskningsmärkta, Manuskript i sammanläggningsavhandlingar, Sidor saknas i kapitel
+#Innehåller: Ahead of print, Ej granskningsmärkta, Manuskript i sammanläggningsavhandlingar, Sidor saknas i kapitel, 
+#Orcid saknas för enstaka poster
 #
 #
 #
@@ -14,6 +15,12 @@ library(stringr)
 
 #Läs in data från DiVA. Vi använder en csvall2-fil.
 diva <- read_csv(file = "/home/shub/assets/diva/diva_researchpubl_latest.csv")
+
+#Läs in en csv2
+author <- read_csv("/home/shub/assets/diva/diva_author_sh_latest.csv")
+
+#PID blir felaktigt format vid inläsning, därför:
+colnames(author)[1] <- "PID"
 
 
 # Ahead of print ----------------------------------------------------------
@@ -61,3 +68,21 @@ kapitel <- diva %>%
   filter((is.na(StartPage) & (is.na(EndPage)))) %>%
   select(PID, Title, HostPublication, Year, Publisher, ISBN) %>%
   write_csv("Kapitel utan sidor")
+
+
+# Orcid saknas för enstaka poster ------------------------------
+#Enstaka poster som saknar orcid, där lokaltID annars har det. Ger en csv.fil.
+
+id_all <- author %>%
+  arrange(Id) %>%
+  select(Id, Orcid, PID)
+
+id_master <- id_all %>%
+  filter(!(is.na(Orcid))) %>%
+  distinct(Id, Orcid)
+
+missing_orcid <- id_all %>%
+  filter(!(is.na(Id))) %>%
+  filter(is.na(Orcid)) %>%
+  inner_join(id_master, "Id") %>%
+  write_csv("Uppdatera orcid")
