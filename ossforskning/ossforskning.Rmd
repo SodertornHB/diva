@@ -8,7 +8,7 @@ header-includes:
   \pagestyle{fancy} 
   \fancyhf{}
   \addtolength{\headheight}{3cm}
-  \rhead{Biblioteket, författare \myformat\today} 
+  \rhead{Biblioteket, Författare \myformat\today} 
   \lhead{\includegraphics[width=6cm]{sh.logo}}
   \rfoot{\thepage}
 output:
@@ -28,7 +28,7 @@ source('/home/shub/src/common/lib/sh_diva_bibliometrics_functions.R')
 sh_archive_start("ÖSS")
 
 #Välj år
-y <- 2016
+y <- 2017
 #Möjlig automatisering
 #y <- as.integer(format(Sys.time(), "%Y"))-1
 
@@ -63,7 +63,10 @@ För att endast räkna den vetenskapliga publiceringen med anknytning till högs
 Endast publikationer som är publicerade eller *In press* är medräknade. `r ahead` artiklar med status *Epub ahead of print* är inte medräknade. Publikationstyperna *Samlingsverk (redaktörskap)*, *Proceedings (redaktörskap)* och *Övrigt* är inte medräknade.
 För *Konferensbidrag* räknas endast *Publiserat paper* (dvs alla andra underkategorier räknas bort).
 
-Tabellen till årsredovisningen finns i bifogad fil. Här redovisas dels det totala antalet publikationer inom varje kategori, samt hur många av dessa som är refereedgranskade.
+Tabellen till redovisningen finns i bifogad fil. Här redovisas dels det totala antalet publikationer inom varje kategori, samt hur många av dessa som är refereedgranskade.
+
+Kontaktperson:
+
 ```{r, include=FALSE}
 #Slå ihop publikationstyper genom att byta namn på värden
 ossforskAR$PublicationType <- recode(ossforskAR$PublicationType, 
@@ -95,7 +98,7 @@ oss_ref <- ossforskAR %>%
   spread(Year, n)
 
 oss_ref <- oss_ref %>%
-  spread(ContentType, '2016')
+  spread(ContentType, '2017')
 
 oss_table <- left_join(oss_table, oss_ref, "PublicationType")
 
@@ -111,6 +114,7 @@ oss_table <- bind_rows(oss_table, colSums(oss_table[2:3]))
 write_csv(oss_table, "Underlag_Östersjöstiftelsen.csv")
 sh_archive_resource("Underlag_Östersjöstiftelsen.csv")
 sh_archive_df(ossforskAR, "Medräknade_publikationer")
+sh_archive_df(diva, "Diva_rådata")
 sh_archive_end()
 ```
 
