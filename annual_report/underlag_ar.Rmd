@@ -28,7 +28,7 @@ source('/home/shub/src/common/lib/sh_diva_bibliometrics_functions.R')
 sh_archive_start("Årsredovisning")
 #Läs in data från DiVA. Vi använder en csvall2-fil
 diva <- read_csv(file="/home/shub/assets/diva/diva_researchpubl_sh_latest.csv")
-diva <- diva %>% filter(between(Year, 2014, 2017))
+diva <- diva %>% filter(between(Year, 2013, 2017))
 ```
 
 ```{r filter, echo=FALSE}
@@ -100,7 +100,7 @@ other_publication <- divaAR %>%
   spread(Year, n)
 
 ar_table <- bind_rows(articles, other_publication)
-ar_table <- ar_table[c(1,5,4,3,2)]
+ar_table <- ar_table[c(1,6,5,4,3,2)]
 ar_table[is.na(ar_table)] <- 0L
 
 ```
