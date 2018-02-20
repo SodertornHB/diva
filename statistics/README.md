@@ -10,3 +10,6 @@ Kombinerar doktorand-data med DiVA-data. Indata om doktorander kommer från AVM.
 
 ## openaccess.R
 Tar fram antal OA-registreringar i DiVA för artiklar, kapitel och böcker. Redovisar DOAJ-tidskrifter, länk till fri fulltext och fulltext i DiVA. Även en version med filter för institutionerna.
+
+## publicering_amne.R
+Statistik för ett ämnes publikationer. Tabell med vetenskapliga publikationer, förlag, tidskrifter och OA-statistik.
