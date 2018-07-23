@@ -37,7 +37,7 @@ ahead_of_print <- diva %>%
 #Poster som är markerade som ej granskade, trots att de inte ligger i granskningen.
 #Ger en csv-fil med PID och titel.
 not_reviewed <- diva %>% filter(Reviewed == "false")
-not_reviewed <- not_reviewed %>% select(`PID`, Title)
+not_reviewed <- not_reviewed %>% select(PID, Title)
 write_csv(not_reviewed, "Ej granskningsmärkta")
 
 
