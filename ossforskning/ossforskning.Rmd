@@ -27,8 +27,8 @@ library(tidyverse)
 source('/home/shub/src/common/lib/sh_diva_bibliometrics_functions.R')
 sh_archive_start("ÖSS")
 
-#Välj år
-y <- 2017
+#Välj år. Lägg även in på rad 108.
+y <- 2018
 #Möjlig automatisering
 #y <- as.integer(format(Sys.time(), "%Y"))-1
 
@@ -37,6 +37,7 @@ diva <- read_csv(file="/home/shub/assets/diva/diva_researchpubl_sh_latest.csv")
 diva <- diva %>% filter(Year == y)
 
 ossforsk <- subject_baltic(diva)
+ossforsk <- funder_oss(ossforsk)
 
 #De publikationer som skall ingå i sammanställningen
 ossforskAR <- ossforsk %>% 
@@ -51,13 +52,17 @@ ossforskAR <- ossforsk %>%
 ```
 ```{r ahead, echo=FALSE}
 #Antal artiklar med status Ahead of print
-ahead <- nrow(subset(ossforsk, Status == "aheadofprint"))
+ahead <- nrow(subset(ossforskAR, Status == "aheadofprint"))
 ```
+```{r oss_fund, echo=FALSE}
+oss_fund <- nrow(subset(ossforskAR, oss == TRUE))
+```
+
 
 # Uttag från DiVA till den årligar redovisningen till Östersjöstiftelsen
 Uttaget från Södertörns högskolas pubikationsdatabas DiVA är gjort `r Sys.Date()`
 
-Sammanställningen redovisar de publikationer som i DiVA markerat Östersjöstiftelsen som finansiär och/eller med ämnet Östersjö- och Östeuropaforsning.
+I DiVA har `r oss_fund` publikationer Östersjöstiftelsen markerat som finansiär. I sammanställningen redovisar även de publikationer som också/eller är markerade med forskningsämnet Östersjö- och Östeuropaforskning.
 
 För att endast räkna den vetenskapliga publiceringen med anknytning till högskolan görs ett urval.
 Endast publikationer som är publicerade eller *In press* är medräknade. `r ahead` artiklar med status *Epub ahead of print* är inte medräknade. Publikationstyperna *Samlingsverk (redaktörskap)*, *Proceedings (redaktörskap)* och *Övrigt* är inte medräknade.
@@ -78,7 +83,6 @@ ossforskAR$PublicationType <- recode(ossforskAR$PublicationType,
                                      "Konferensbidrag" = "Publicerade konferensbidrag", 
                                      "Rapport" = "Rapporter")
 
-
 #Gör en tabell som skrivs till csv omsorterad
 ossforskAR$PublicationType <- factor(ossforskAR$PublicationType, ordered = TRUE, 
                                  levels = c("Artiklar i tidskrift", "Böcker", "Bokkapitel", "Publicerade konferensbidrag", 
@@ -98,7 +102,7 @@ oss_ref <- ossforskAR %>%
   spread(Year, n)
 
 oss_ref <- oss_ref %>%
-  spread(ContentType, '2017')
+  spread(ContentType, '2018')
 
 oss_table <- left_join(oss_table, oss_ref, "PublicationType")
 
