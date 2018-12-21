@@ -47,7 +47,7 @@ ahead <- nrow(subset(diva, Status == "aheadofprint"))
 ```
 ```{r rev, echo=FALSE}
 #Antal publikationer i granskningen
-rev <- nrow(subset(diva, Reviewed =="false"))
+rev <- nrow(subset(divaAR, Reviewed =="false"))
 ```
 # Underlag från DiVA till årsredovisningen
 Uttaget från Södertörns högskolas pubikationsdatabas DiVA är gjort `r Sys.Date()` Antalet publikationer är uppdaterat för samtliga år.
@@ -59,9 +59,14 @@ För *Konferensbidrag* räknas endast *Publiserat paper* (dvs alla andra underka
 `r rev` publikationer som ännu inte granskats av bibliotekarie är medräknade. 
 
 Tabellen till årsredovisningen finns i bifogad fil.
-**OBS!** I tabellen ingår den doktorsavhandling 2016 som ansvariga för årsredovisningen valde att ej räkna med.
 
-Kontaktperson:
+# Avvikelser från tidigare år
+I tabellen ingår den doktorsavhandling 2016 som ansvariga för årsredovisningen valde att ej räkna med.
+
+*Artikel i antologi: Övrigt vetenskaplig* 2016 har minskat med en publikation. Vid årsredovisningen 2017 var nedanstående publikation ännu inte granskad. Utgivningsåret har ändrats från 2016 till 2018.
+
+Couldry, N., Rodriguez, C., Bolin, G., Cohen, J., Goggin, G., Kraidy, M., … Thomas, P. (2018). Media and Communications. In *Rethinking Society for the 21st Century: Report of the International Panel on Social Progress: Volume 2: Political Regulation, Governance, and Societal Transformations* (pp. 523–562). Cambridge : Cambridge University Press. 
+
 
 ```{r, include=FALSE}
 #Slå ihop publikationstyper genom att byta namn på värden
@@ -118,3 +123,6 @@ sh_archive_end()
 DiVA har använts som publikationsdatabas vid Södertörns högskola sedan 2011 och innehåller publikationer från 2000
 och framåt. Sedan hösten 2011 har det gått att markera andra publikationer än artiklar som refereed. Sedan
 februari 2013 finns underkategorier till publikationstyperna *Artikel i tidskrift* och *Konferensbidrag*.
+
+
+**Kontaktperson:**
