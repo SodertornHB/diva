@@ -70,7 +70,9 @@ För *Konferensbidrag* räknas endast *Publiserat paper* (dvs alla andra underka
 
 Tabellen till redovisningen finns i bifogad fil. Här redovisas dels det totala antalet publikationer inom varje kategori, samt hur många av dessa som är refereedgranskade.
 
-Kontaktperson:
+# Kommentar
+
+
 
 ```{r, include=FALSE}
 #Slå ihop publikationstyper genom att byta namn på värden
@@ -108,8 +110,9 @@ oss_table <- left_join(oss_table, oss_ref, "PublicationType")
 
 oss_table[is.na(oss_table)] <- 0L
 
-#Blir double instället för integer
-oss_table <- bind_rows(oss_table, colSums(oss_table[2:3]))
+#Blir double instället för integer.
+#Summera i excel
+#oss_table <- bind_rows(oss_table, colSums(oss_table[2:3]))
 
 ```
 
@@ -126,3 +129,5 @@ sh_archive_end()
 DiVA har använts som publikationsdatabas vid Södertörns högskola sedan 2011 och innehåller publikationer från 2000
 och framåt. Sedan hösten 2011 har det gått att markera andra publikationer än artiklar som refereed. Sedan
 februari 2013 finns underkategorier till publikationstyperna *Artikel i tidskrift* och *Konferensbidrag*.
+
+**Kontaktperson:**

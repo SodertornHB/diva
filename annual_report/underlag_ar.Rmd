@@ -65,7 +65,8 @@ I tabellen ingår den doktorsavhandling 2016 som ansvariga för årsredovisninge
 
 *Artikel i antologi: Övrigt vetenskaplig* 2016 har minskat med en publikation. Vid årsredovisningen 2017 var nedanstående publikation ännu inte granskad. Utgivningsåret har ändrats från 2016 till 2018.
 
-Couldry, N., Rodriguez, C., Bolin, G., Cohen, J., Goggin, G., Kraidy, M., … Thomas, P. (2018). Media and Communications. In *Rethinking Society for the 21st Century: Report of the International Panel on Social Progress: Volume 2: Political Regulation, Governance, and Societal Transformations* (pp. 523–562). Cambridge : Cambridge University Press. 
+
+# Kommentar
 
 
 ```{r, include=FALSE}
@@ -125,4 +126,6 @@ och framåt. Sedan hösten 2011 har det gått att markera andra publikationer ä
 februari 2013 finns underkategorier till publikationstyperna *Artikel i tidskrift* och *Konferensbidrag*.
 
 
-**Kontaktperson:**
+**Kontaktperson:** 
+
+
