@@ -13,3 +13,9 @@ Tar fram antal OA-registreringar i DiVA för artiklar, kapitel och böcker. Redo
 
 ## publicering_amne.R
 Statistik för ett ämnes publikationer. Tabell med vetenskapliga publikationer, förlag, tidskrifter och OA-statistik.
+
+## publicering_sh.R
+Tabeller över publiceringen för hela högskolan och för varje institution.
+
+## publisher.R
+Publikationer från ett specifikt förlag.
