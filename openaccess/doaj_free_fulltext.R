@@ -7,8 +7,13 @@
 #Ger en csv fil antingen med alla artiklar, eller med enbart de som finns i DOAJ med kolumnen add_doaj, som 
 #visar från vilket år tidskriften är OA.
 #
+#
+#
 
 library(tidyverse)
+
+source('/home/shub/src/common/lib/sh_parameters.R')
+source('/home/shub/src/common/lib/sh_diva_bibliometrics_functions.R')
 
 #Läs in data från DiVA. Vi använder en csvall2-fil.
 diva <- read_csv(file = "/home/shub/assets/diva/diva_researchpubl_latest.csv")
@@ -24,7 +29,7 @@ diva_art_rec <- diva %>%
   filter(PublicationType %in% c("Artikel, forskningsöversikt", "Artikel i tidskrift", "Artikel, recension")) %>%
   mutate(doaj = ((JournalISSN %in% doaj_listan$`Journal ISSN (print version)`)|
                    (JournalEISSN %in% doaj_listan$`Journal EISSN (online version)`)))%>%
-  select(PID, Name, Title, Journal,JournalISSN, JournalEISSN, Year, ContentType, PublicationSubtype, Status, 
+  select(PID, Name, Title, Journal,JournalISSN, JournalEISSN, Year, ContentType, PublicationSubtype, Status, FullTextLink,
          DOI, Urls, FreeFulltext, doaj)
 
 doaj_kort <- doaj_listan %>%
@@ -51,3 +56,4 @@ diva_art_doaj <- diva_art_doaj %>%
 
 #diva_art_rec innehåller alla artiklar, diva_art_doaj enbert de med träff i DOAJ
 write_csv(diva_art_doaj, "doaj_diva.csv")
+

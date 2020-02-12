@@ -28,7 +28,7 @@ source('/home/shub/src/common/lib/sh_diva_bibliometrics_functions.R')
 sh_archive_start("ÖSS")
 
 #Välj år. Lägg även in på rad 108.
-y <- 2018
+y <- 2019
 #Möjlig automatisering
 #y <- as.integer(format(Sys.time(), "%Y"))-1
 
@@ -39,23 +39,29 @@ diva <- diva %>% filter(Year == y)
 ossforsk <- subject_baltic(diva)
 ossforsk <- funder_oss(ossforsk)
 
+#Filtrerar till Östersjöforskning
+ossforsk <- ossforsk %>% filter(baltic == TRUE)
+
 #De publikationer som skall ingå i sammanställningen
 ossforskAR <- ossforsk %>% 
   filter(!(PublicationType == "Samlingsverk (redaktörskap)"|PublicationType == "Proceedings (redaktörskap)" |PublicationType == "Övrigt"
            |PublicationType == "Doktorsavhandling, monografi" |PublicationType == "Doktorsavhandling, sammanläggning"
            |PublicationType == "Licentiatavhandling, monografi" |PublicationType == "Licentiatavhandling, sammanläggning")) %>%
   filter(ContentType!="Övrig (populärvetenskap, debatt, mm)") %>%
-  filter((is.na(Status))|Status=="published") %>%
+  filter((is.na(Status))|Status=="published"|Status=="inPress") %>%
   filter(is.na(PublicationSubtype)|PublicationSubtype == "publishedPaper" |PublicationSubtype == "meetingAbstract"
-         |PublicationSubtype == "editorialMaterial") %>%
-  filter(baltic == TRUE)
+         |PublicationSubtype == "editorialMaterial")
 ```
 ```{r ahead, echo=FALSE}
 #Antal artiklar med status Ahead of print
-ahead <- nrow(subset(ossforskAR, Status == "aheadofprint"))
+ahead <- nrow(subset(ossforsk, Status == "aheadofprint"))
 ```
 ```{r oss_fund, echo=FALSE}
 oss_fund <- nrow(subset(ossforskAR, oss == TRUE))
+```
+```{r samlingsverk, echo=FALSE}
+samlingsverk <- nrow(subset(ossforsk, (PublicationType == "Samlingsverk (redaktörskap)" 
+|PublicationType == "Proceedings (redaktörskap)")))
 ```
 
 
@@ -64,11 +70,13 @@ Uttaget från Södertörns högskolas pubikationsdatabas DiVA är gjort `r Sys.D
 
 I DiVA har `r oss_fund` publikationer Östersjöstiftelsen markerat som finansiär. I sammanställningen redovisar även de publikationer som också/eller är markerade med forskningsämnet Östersjö- och Östeuropaforskning.
 
-För att endast räkna den vetenskapliga publiceringen med anknytning till högskolan görs ett urval.
-Endast publikationer som är publicerade eller *In press* är medräknade. `r ahead` artiklar med status *Epub ahead of print* är inte medräknade. Publikationstyperna *Samlingsverk (redaktörskap)*, *Proceedings (redaktörskap)* och *Övrigt* är inte medräknade.
+För att endast räkna den vetenskapliga publiceringen med anknytning till högskolan görs ett urval. Publikationerna fraktioneras inte.
+
+Endast publikationer som är publicerade eller *In press* är medräknade. `r ahead` artiklar med status *Epub ahead of print* är inte medräknade.\
+Publikationstyperna för redaktörskap, *Samlingsverk (redaktörskap)* och *Proceedings (redaktörskap)* är inte medräknade. Under året gäller det `r samlingsverk` titlar inom ämnesområdet. Publikationstypen *Övrigt* är inte heller medräknad.
 För *Konferensbidrag* räknas endast *Publiserat paper* (dvs alla andra underkategorier räknas bort).
 
-Tabellen till redovisningen finns i bifogad fil. Här redovisas dels det totala antalet publikationer inom varje kategori, samt hur många av dessa som är refereedgranskade.
+Tabellen till redovisningen finns i bifogad fil. Här redovisas dels det totala antalet publikationer inom varje kategori, samt hur många av dessa som är refereegranskade.
 
 # Kommentar
 
@@ -104,7 +112,7 @@ oss_ref <- ossforskAR %>%
   spread(Year, n)
 
 oss_ref <- oss_ref %>%
-  spread(ContentType, '2018')
+  spread(ContentType, '2019')
 
 oss_table <- left_join(oss_table, oss_ref, "PublicationType")
 
@@ -130,4 +138,7 @@ DiVA har använts som publikationsdatabas vid Södertörns högskola sedan 2011 
 och framåt. Sedan hösten 2011 har det gått att markera andra publikationer än artiklar som refereed. Sedan
 februari 2013 finns underkategorier till publikationstyperna *Artikel i tidskrift* och *Konferensbidrag*.
 
-**Kontaktperson:**
+**Kontaktperson:**\
+Kontaktperson, biblioteket\
+epost\
+tel.

@@ -28,7 +28,7 @@ source('/home/shub/src/common/lib/sh_diva_bibliometrics_functions.R')
 sh_archive_start("Årsredovisning")
 #Läs in data från DiVA. Vi använder en csvall2-fil
 diva <- read_csv(file="/home/shub/assets/diva/diva_researchpubl_sh_latest.csv")
-diva <- diva %>% filter(between(Year, 2014, 2018))
+diva <- diva %>% filter(between(Year, 2015, 2019))
 ```
 
 ```{r filter, echo=FALSE}
@@ -36,7 +36,7 @@ diva <- diva %>% filter(between(Year, 2014, 2018))
 divaAR <- diva %>% 
   filter(!(PublicationType == "Samlingsverk (redaktörskap)"|PublicationType == "Proceedings (redaktörskap)" |PublicationType == "Övrigt")) %>%
   filter(ContentType!="Övrig (populärvetenskap, debatt, mm)") %>%
-  filter((is.na(Status))|Status=="published") %>%
+  filter((is.na(Status))|Status=="published"|Status=="inPress") %>%
   filter(is.na(PublicationSubtype)|PublicationSubtype == "publishedPaper" |PublicationSubtype == "meetingAbstract" 
          |PublicationSubtype == "editorialMaterial")
 ```
@@ -47,12 +47,13 @@ ahead <- nrow(subset(diva, Status == "aheadofprint"))
 ```
 ```{r rev, echo=FALSE}
 #Antal publikationer i granskningen
-rev <- nrow(subset(divaAR, Reviewed =="false"))
+rev <- nrow(subset(divaAR, Reviewed =="FALSE"))
 ```
 # Underlag från DiVA till årsredovisningen
 Uttaget från Södertörns högskolas pubikationsdatabas DiVA är gjort `r Sys.Date()` Antalet publikationer är uppdaterat för samtliga år.
 
-För att endast räkna den vetenskapliga publiceringen med anknytning till högskolan görs ett urval.  
+För att endast räkna den vetenskapliga publiceringen med anknytning till högskolan görs ett urval. Publikationerna fraktioneras inte.
+
 Endast publikationer som är publicerade eller *In press* är medräknade. `r ahead` artiklar med status *Epub ahead of print* är inte medräknade. Publikationstyperna *Samlingsverk (redaktörskap)*, *Proceedings(redaktörskap)* och *Övrigt* är inte medräknade.
 För *Konferensbidrag* räknas endast *Publiserat paper* (dvs alla andra underkategorier räknas bort).
 
@@ -60,13 +61,11 @@ För *Konferensbidrag* räknas endast *Publiserat paper* (dvs alla andra underka
 
 Tabellen till årsredovisningen finns i bifogad fil.
 
-# Avvikelser från tidigare år
-I tabellen ingår den doktorsavhandling 2016 som ansvariga för årsredovisningen valde att ej räkna med.
-
-*Artikel i antologi: Övrigt vetenskaplig* 2016 har minskat med en publikation. Vid årsredovisningen 2017 var nedanstående publikation ännu inte granskad. Utgivningsåret har ändrats från 2016 till 2018.
+# Avvikelser från föregående år
 
 
 # Kommentar
+
 
 
 ```{r, include=FALSE}
@@ -126,6 +125,8 @@ och framåt. Sedan hösten 2011 har det gått att markera andra publikationer ä
 februari 2013 finns underkategorier till publikationstyperna *Artikel i tidskrift* och *Konferensbidrag*.
 
 
-**Kontaktperson:** 
-
+**Kontaktperson:**\ 
+Kontaktperson, biblioteket\
+epost\
+tel. 
 

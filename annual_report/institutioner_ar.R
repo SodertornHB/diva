@@ -11,13 +11,13 @@ library(tidyverse)
 source('/home/shub/src/common/lib/sh_parameters.R')
 source('/home/shub/src/common/lib/sh_diva_bibliometrics_functions.R')
 
-sh_archive_start("HS")
+sh_archive_start("IKL")
 
 # Lägg filen från sammaställningen till årsredoviningen i wd
 diva <- read_csv(file="Diva_rådata.csv")
 
 #Gör en körning per institution: nmt, sam, hs, ikl
-inst <- hs
+inst <- ikl
 
 inst_ar <- diva %>% filter_orgs(inst)
 
@@ -25,7 +25,7 @@ inst_ar <- diva %>% filter_orgs(inst)
 divaAR <- inst_ar %>% 
   filter(!(PublicationType == "Samlingsverk (redaktörskap)"|PublicationType == "Proceedings (redaktörskap)" |PublicationType == "Övrigt")) %>%
   filter(ContentType!="Övrig (populärvetenskap, debatt, mm)") %>%
-  filter((is.na(Status))|Status=="published") %>%
+  filter((is.na(Status))|Status=="published"|Status=="inPress") %>%
   filter(is.na(PublicationSubtype)|PublicationSubtype == "publishedPaper" |PublicationSubtype == "meetingAbstract" 
          |PublicationSubtype == "editorialMaterial")
 

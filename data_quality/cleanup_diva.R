@@ -45,7 +45,7 @@ write_csv(not_reviewed, "Ej granskningsmärkta")
 #Ger en csv-fil
 
 #Välj första publikationsår för avhandlingarna
-thesis_year <- 2012
+thesis_year <- 2014
 
 manuscript <- diva %>%
   filter(PublicationType == "Manuskript (preprint)") %>%
