@@ -7,8 +7,8 @@ header-includes:
   \newdateformat{myformat}{\THEYEAR-\twodigit{\THEMONTH}-\twodigit{\THEDAY}}
   \pagestyle{fancy} 
   \fancyhf{}
-  \addtolength{\headheight}{3cm}
-  \rhead{Biblioteket, Författare \myformat\today} 
+  \addtolength{\headheight}{4cm}
+  \rhead{Biblioteket, Författare\myformat\today} 
   \lhead{\includegraphics[width=6cm]{sh.logo}}
   \rfoot{\thepage}
 output:
@@ -28,7 +28,7 @@ source('/home/shub/src/common/lib/sh_diva_bibliometrics_functions.R')
 sh_archive_start("Årsredovisning")
 #Läs in data från DiVA. Vi använder en csvall2-fil
 diva <- read_csv(file="/home/shub/assets/diva/diva_researchpubl_sh_latest.csv")
-diva <- diva %>% filter(between(Year, 2015, 2019))
+diva <- diva %>% filter(between(Year, 2016, 2020))
 ```
 
 ```{r filter, echo=FALSE}
@@ -109,11 +109,33 @@ ar_table <- ar_table[c(1,6,5,4,3,2)]
 ar_table[is.na(ar_table)] <- 0L
 
 ```
+```{r, include=FALSE}
+#Antal OA Artiklar i tidskrift
+art_ref <- divaAR %>%
+  filter(PublicationType == "Artiklar i tidskrift") %>%
+  filter(ContentType =="Refereegranskat") %>%
+  group_by (Year) %>%
+  count(Year) %>%
+  select(Year, n) %>%
+  arrange(Year)
+
+oa_art <- divaAR %>%
+  filter(PublicationType == "Artiklar i tidskrift") %>%
+  filter(ContentType =="Refereegranskat") %>%
+  filter(FreeFulltext == TRUE | (!(is.na(FullTextLink)))) %>%
+  count(Year)
+ 
+oa_art_table <- full_join(art_ref, oa_art, by = "Year")
+names(oa_art_table) <- c("Year", "articles", "oa_articles")
+
+```
 
 ```{r, include=FALSE}
 #Spara i excel innan leverans
 write_csv(ar_table, "Underlag_årsredovisning.csv")
+write_csv(oa_art_table, "Artiklar_OA.csv")
 sh_archive_resource("Underlag_årsredovisning.csv")
+sh_archive_resource("Artiklar_OA.csv")
 sh_archive_df(divaAR, "Medräknade_publikationer")
 sh_archive_df(diva, "Diva_rådata")
 sh_archive_end()
@@ -126,7 +148,6 @@ februari 2013 finns underkategorier till publikationstyperna *Artikel i tidskrif
 
 
 **Kontaktperson:**\ 
-Kontaktperson, biblioteket\
-epost\
-tel. 
+Namn, biblioteket\
+namn@sh.se\
 

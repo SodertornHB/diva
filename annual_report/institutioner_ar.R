@@ -11,12 +11,14 @@ library(tidyverse)
 source('/home/shub/src/common/lib/sh_parameters.R')
 source('/home/shub/src/common/lib/sh_diva_bibliometrics_functions.R')
 
-sh_archive_start("IKL")
+sh_archive_start("ikl")
 
 # Lägg filen från sammaställningen till årsredoviningen i wd
 diva <- read_csv(file="Diva_rådata.csv")
+#diva <- read_csv(file="/home/shub/assets/diva/diva_researchpubl_sh_latest.csv")
+diva <- diva %>% filter(between(Year, 2016, 2020))
 
-#Gör en körning per institution: nmt, sam, hs, ikl
+#Gör en körning per institution: nmt, sam, hs, ikl, (polisutbildning, lararutbildning)
 inst <- ikl
 
 inst_ar <- diva %>% filter_orgs(inst)
@@ -48,8 +50,10 @@ divaAR$PublicationType <- recode(divaAR$PublicationType,
 divaAR$PublicationType <- factor(divaAR$PublicationType, ordered = TRUE, 
                                  levels = c("Artiklar i tidskrift", "Artiklar i antologi", "Monografier", "Publicerade konferensbidrag", 
                                             "Doktorsavhandlingar", "Licentiatavhandlingar", "Rapporter"))
+
 divaAR$ContentType <- factor(divaAR$ContentType, ordered = TRUE,
                              levels = c("Refereegranskat", "Övrigt vetenskapligt"))
+
 
 articles <- divaAR %>%
   subset(PublicationType=="Artiklar i tidskrift"|PublicationType=="Artiklar i antologi") %>%
