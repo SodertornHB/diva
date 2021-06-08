@@ -8,7 +8,7 @@ date:  '`r format(Sys.time(), "%d %B, %Y")`'
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-Sammanställning av artiklar som i DiVA är registrerade som Epub ahead of print. Behöver kontrolleras om de fått placering i voym och nummer.
+
 ```{r, include=FALSE}
 library(tidyverse)
 library(stringr)
@@ -16,11 +16,22 @@ library(stringr)
 #Hämta DiVA-data. Forskningspublikationer (alla).
 diva <- read_csv(file = "/home/shub/assets/diva/diva_researchpubl_latest.csv")
 
+```
+```{r ahead, echo=FALSE}
+ahead <- nrow(subset(diva, Status == "aheadofprint"))
+```
+Sammanställning av artiklar som i DiVA är registrerade som Epub ahead of print. Behöver kontrolleras om de fått placering i voym och nummer. `r ahead` artiklar
+
+```{r, include=FALSE}
+
+
 #Uraval av publikationer efter status
 ahead_of_print <- diva %>%
   subset(Status == "aheadofprint") %>%
   select(PID, DOI) %>%
   transmute(PID, link = str_c("https://doi.org/", DOI))
+
+sort(ahead_of_print$PID)
 
 ```
 

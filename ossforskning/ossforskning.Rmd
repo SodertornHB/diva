@@ -9,7 +9,7 @@ header-includes:
   \fancyhf{}
   \addtolength{\headheight}{4cm}
   \rhead{Biblioteket, Författare\myformat\today} 
-  \lhead{\includegraphics[width=6cm]{sh.logo}}
+  \lhead{\includegraphics[width=6cm]{sh_logo.png}}
   \rfoot{\thepage}
 output:
   pdf_document:
@@ -48,7 +48,7 @@ n_issn <- read.csv(file="/home/shub/assets/nsd.issn.csv",
                    sep=";",
                    na.strings = c("", "NA"),
                    stringsAsFactors = FALSE,
-                   encoding = "latin1")
+                   encoding = "utf8")
 
 n_forlag <- read.csv(file="/home/shub/assets/nsd.forlag.csv",
          header=TRUE,

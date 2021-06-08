@@ -32,6 +32,7 @@ ahead_of_print <- diva %>%
   select(PID, DOI) %>%
   transmute(PID, link = str_c("https://doi.org/", DOI))
 
+sort(ahead_of_print$PID)
 
 # Ej granskningsmärkta ----------------------------------------------------
 #Poster som är markerade som ej granskade, trots att de inte ligger i granskningen.
@@ -45,7 +46,7 @@ write_csv(not_reviewed, "Ej granskningsmärkta")
 #Ger en csv-fil
 
 #Välj första publikationsår för avhandlingarna
-thesis_year <- 2014
+thesis_year <- 2015
 
 manuscript <- diva %>%
   filter(PublicationType == "Manuskript (preprint)") %>%
@@ -86,3 +87,4 @@ missing_orcid <- id_all %>%
   filter(is.na(Orcid)) %>%
   inner_join(id_master, "Id") %>%
   write_csv("Uppdatera orcid")
+

@@ -20,7 +20,7 @@ n_issn <- read.csv(file="/home/shub/assets/nsd.issn.csv",
                    sep=";",
                    na.strings = c("", "NA"),
                    stringsAsFactors = FALSE,
-                   encoding = "latin1")
+                   encoding = "utf8")
 
 diva <- read_csv("/home/shub/assets/diva/diva_researchpubl_sh_latest.csv")
 diva <- diva %>% filter(between(Year, 2015, 2020))
@@ -235,3 +235,4 @@ sh_archive_df(art_ind, "Artiklar_index.csv")
 sh_archive_df(inst_konf, "Konferens_inst.csv")
 sh_archive_df(diva, "Diva_rådata.csv")
 sh_archive_end()
+

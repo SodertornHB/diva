@@ -19,7 +19,7 @@ diva$JournalEISSN[is.na(diva$JournalEISSN)] <- 0L
 diva$FreeFulltext[diva$FreeFulltext == "true"] <- TRUE
 
 diva_art <- diva %>%
-  filter(between(Year, 2017, 2018)) %>%
+  filter(between(Year, 2020, 2021)) %>%
   filter(PublicationType %in% c("Artikel, forskningsöversikt", "Artikel i tidskrift")) %>%
   filter(ContentType != "Övrig (populärvetenskap, debatt, mm)") %>%
   mutate(doaj = ((JournalISSN %in% doaj_listan$`Journal ISSN (print version)`)|

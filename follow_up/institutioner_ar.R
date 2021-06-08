@@ -16,7 +16,7 @@ sh_archive_start("ikl")
 # Lägg filen från sammaställningen till årsredoviningen i wd
 diva <- read_csv(file="Diva_rådata.csv")
 #diva <- read_csv(file="/home/shub/assets/diva/diva_researchpubl_sh_latest.csv")
-diva <- diva %>% filter(between(Year, 2016, 2020))
+diva <- diva %>% filter(between(Year, 2014, 2020))
 
 #Gör en körning per institution: nmt, sam, hs, ikl, (polisutbildning, lararutbildning)
 inst <- ikl
