@@ -15,7 +15,7 @@ sh_archive_start("Öppen publicering")
 
 diva <- read_csv("/home/shub/assets/diva/diva_researchpubl_sh_latest.csv")
 
-diva <- diva %>% filter(between(Year, 2013, 2017))
+diva <- diva %>% filter(between(Year, 2016, 2020))
 doaj_listan <- read_csv("/home/shub/assets/doaj.csv")
 
 diva$JournalISSN[is.na(diva$JournalISSN)] <- 0L

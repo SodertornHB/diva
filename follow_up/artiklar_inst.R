@@ -23,7 +23,7 @@ n_issn <- read.csv(file="/home/shub/assets/nsd.issn.csv",
                    encoding = "utf8")
 
 diva <- read_csv("/home/shub/assets/diva/diva_researchpubl_sh_latest.csv")
-diva <- diva %>% filter(between(Year, 2015, 2020))
+diva <- diva %>% filter(between(Year, 2016, 2021))
 
 diva$JournalISSN[is.na(diva$JournalISSN)] <- 0L
 diva$JournalEISSN[is.na(diva$JournalEISSN)] <- 0L
@@ -52,12 +52,12 @@ ahead <- nrow(subset(art, Status == "aheadofprint"))
 # nsd_kol = vektor som bestämmer vilken kolumn nivåvärdet hämtas från ur norska filerna
 # Omatchade publikationer måste tas bort innan nivån hämtas. Läggs tillbaka efteråt.
 
-year1 <- 2015
-year2 <- 2016
-year3 <- 2017
-year4 <- 2018
-year5 <- 2019
-year6 <- 2020
+year1 <- 2016
+year2 <- 2017
+year3 <- 2018
+year4 <- 2019
+year5 <- 2020
+year6 <- 2021
 
 
 art_1 <- art %>%
@@ -178,10 +178,12 @@ year_6 <- bind_rows(art_norsk, art_ej_norsk)
 
 art_alla <- bind_rows(year_1, year_2, year_3, year_4, year_5, year_6)
 art_alla$ISI[!is.na(art_alla$ISI)] <- 1L
+art_alla$ISI[is.na(art_alla$ISI)] <- 0L
 art_alla$ScopusId[!is.na(art_alla$ScopusId)] <- 1L
+art_alla$ScopusId[is.na(art_alla$ScopusId)] <- 0L
 art_alla$doaj[art_alla$doaj == TRUE] <- 1L
 art_alla$doaj[art_alla$doaj == FALSE] <- 0L
-art_alla[is.na(art_alla)] <- 0L
+art_alla$nivå[is.na(art_alla$nivå)] <- 0L
 
 norsk <- art_alla %>%
   group_by(nivå) %>% 
