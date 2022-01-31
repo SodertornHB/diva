@@ -8,7 +8,7 @@ header-includes:
   \pagestyle{fancy} 
   \fancyhf{}
   \addtolength{\headheight}{4cm}
-  \rhead{Biblioteket, Författare\myformat\today} 
+  \rhead{Biblioteket, Författare \myformat\today} 
   \lhead{\includegraphics[width=6cm]{sh_logo.png}}
   \rfoot{\thepage}
 output:
@@ -28,7 +28,7 @@ source('/home/shub/src/common/lib/sh_diva_bibliometrics_functions.R')
 sh_archive_start("Årsredovisning")
 #Läs in data från DiVA. Vi använder en csvall2-fil
 diva <- read_csv(file="/home/shub/assets/diva/diva_researchpubl_sh_latest.csv")
-diva <- diva %>% filter(between(Year, 2016, 2020))
+diva <- diva %>% filter(between(Year, 2017, 2021))
 ```
 
 ```{r filter, echo=FALSE}
@@ -149,5 +149,5 @@ februari 2013 finns underkategorier till publikationstyperna *Artikel i tidskrif
 
 **Kontaktperson:**\ 
 Namn, biblioteket\
-namn@sh.se\
+e-post\
 

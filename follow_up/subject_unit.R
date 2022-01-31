@@ -1,6 +1,6 @@
 #
 # subject_unit
-# GL 210208
+# GL 210208 / 211110
 # Uppföljning publikationer i DiVA för ett ämne.
 # Källa DiVA, kompletterat med nivå norska listan.
 #
@@ -16,14 +16,15 @@ n_issn <- read.csv(file="/home/shub/assets/nsd.issn.csv",
                    sep=";",
                    na.strings = c("", "NA"),
                    stringsAsFactors = FALSE,
-                   encoding = "latin1")
+                   encoding = "utf8")
+n_issn$Nivå.2021 <- as.numeric(n_issn$Nivå.2021, "X" = "8")
 
 n_forlag <- read.csv(file="/home/shub/assets/nsd.forlag.csv",
          header=TRUE,
          sep=";",
          na.strings = c("", "NA"),
          stringsAsFactors = FALSE,
-         encoding = "latin1")
+         encoding = "utf8")
 n_forlag$Original.tittel <- recode(n_forlag$Original.tittel, "Södertörns Högskola" = "Södertörns högskola")
 n_forlag$Original.tittel <- recode(n_forlag$Original.tittel, "De Gruyter Mouton" = "Mouton de Gruyter")
 
@@ -41,11 +42,11 @@ diva$SeriesEISSN[is.na(diva$SeriesEISSN)] <- 0L
 # Avgränsningar -----------------------------------------------------------
 #Se även section Författare
 
-year1 <- 2016
-year2 <- 2017
-year3 <- 2018
-year4 <- 2019
-year5 <- 2020
+year1 <- 2017
+year2 <- 2018
+year3 <- 2019
+year4 <- 2020
+year5 <- 2021
 
 diva <- diva %>% filter(between(Year, year1, year5))
 diva_subject <- diva %>% filter_orgs(foretagsekonomi)
@@ -82,12 +83,6 @@ write_csv(publ_tabell, "Tabell publikationer.csv")
 # Matchning norska listan.
 # nsd_kol = vektor som bestämmer vilken kolumn nivåvärdet hämtas från ur norska filerna
 # Omatchade publikationer måste tas bort innan nivån hämtas. Läggs tillbaka efteråt.
-
-#year1 <- 2016 #Anges i inledningen
-#year2 <- 2017
-#year3 <- 2018
-#year4 <- 2019
-#year5 <- 2020
 
 
 art <- publ_vet %>%
@@ -193,9 +188,10 @@ year_5 <- bind_rows(art_norsk, art_ej_norsk)
 
 art_alla <- bind_rows(year_1, year_2, year_3, year_4, year_5)
 art_alla$ISI[!is.na(art_alla$ISI)] <- 1L
+art_alla$ISI[is.na(art_alla$ISI)] <- 0L
 art_alla$ScopusId[!is.na(art_alla$ScopusId)] <- 1L
-art_alla[is.na(art_alla)] <- 0L
-
+art_alla$ScopusId[is.na(art_alla$ScopusId)] <- 0L
+art_alla$nivå[is.na(art_alla$nivå)] <- 0L
 
 # Tabell indexerade artiklar
 
@@ -235,6 +231,7 @@ write_csv(index_art, "Artiklar_index.csv")
 # Norska listan böcker ----------------------------------------------------
 # Viktigt att förlagsnamnen stämmer mot Norska listan. Samma år som definerats under artiklar.
 # Dubbla serier behöver kollas manuellt i filen.
+# Felmeddelanden om filen är tom.
 
 
 bok <- publ_vet %>%
@@ -254,10 +251,10 @@ bok_forlag_norsk <- bok_1 %>%
   ungroup()
 
 bok_forlag_ej_norsk <- bok_1 %>%
-  filter(nsd_row == 0)
+  filter(nsd_row == 0)%>%
+  mutate(nivå = 0)
 
 forlag <- bind_rows(bok_forlag_norsk, bok_forlag_ej_norsk)
-forlag[is.na(forlag)] <- 0L
 
 bok_serie <- bok_1 %>%
   mutate(nsd_index_print = match(SeriesISSN, n_issn$Print.ISSN, nomatch = 0)) %>%
@@ -277,7 +274,6 @@ bok_serie_ej_norsk <- bok_serie %>%
   mutate(nivå = 0)
 
 serie <- bind_rows(bok_serie_norsk, bok_serie_ej_norsk)
-serie[is.na(serie)] <- 0L
 
 byear_1 <- forlag %>%
   mutate(rowSerie = serie$nsd_row[match(PID, serie$PID)]) %>%
@@ -299,10 +295,10 @@ bok_forlag_norsk <- bok_2 %>%
   ungroup()
 
 bok_forlag_ej_norsk <- bok_2 %>%
-  filter(nsd_row == 0)
+  filter(nsd_row == 0)%>%
+  mutate(nivå = 0)
 
 forlag <- bind_rows(bok_forlag_norsk, bok_forlag_ej_norsk)
-forlag[is.na(forlag)] <- 0L
 
 bok_serie <- bok_2 %>%
   mutate(nsd_index_print = match(SeriesISSN, n_issn$Print.ISSN, nomatch = 0)) %>%
@@ -322,7 +318,6 @@ bok_serie_ej_norsk <- bok_serie %>%
   mutate(nivå = 0)
 
 serie <- bind_rows(bok_serie_norsk, bok_serie_ej_norsk)
-serie[is.na(serie)] <- 0L
 
 byear_2 <- forlag %>%
   mutate(rowSerie = serie$nsd_row[match(PID, serie$PID)]) %>%
@@ -344,10 +339,10 @@ bok_forlag_norsk <- bok_3 %>%
   ungroup()
 
 bok_forlag_ej_norsk <- bok_3 %>%
-  filter(nsd_row == 0)
+  filter(nsd_row == 0)%>%
+  mutate(nivå = 0)
 
 forlag <- bind_rows(bok_forlag_norsk, bok_forlag_ej_norsk)
-forlag[is.na(forlag)] <- 0L
 
 bok_serie <- bok_3 %>%
   mutate(nsd_index_print = match(SeriesISSN, n_issn$Print.ISSN, nomatch = 0)) %>%
@@ -367,7 +362,6 @@ bok_serie_ej_norsk <- bok_serie %>%
   mutate(nivå = 0)
 
 serie <- bind_rows(bok_serie_norsk, bok_serie_ej_norsk)
-serie[is.na(serie)] <- 0L
 
 byear_3 <- forlag %>%
   mutate(rowSerie = serie$nsd_row[match(PID, serie$PID)]) %>%
@@ -389,10 +383,10 @@ bok_forlag_norsk <- bok_4 %>%
   ungroup()
 
 bok_forlag_ej_norsk <- bok_4 %>%
-  filter(nsd_row == 0)
+  filter(nsd_row == 0)%>%
+  mutate(nivå = 0)
 
 forlag <- bind_rows(bok_forlag_norsk, bok_forlag_ej_norsk)
-forlag[is.na(forlag)] <- 0L
 
 bok_serie <- bok_4 %>%
   mutate(nsd_index_print = match(SeriesISSN, n_issn$Print.ISSN, nomatch = 0)) %>%
@@ -412,7 +406,6 @@ bok_serie_ej_norsk <- bok_serie %>%
   mutate(nivå = 0)
 
 serie <- bind_rows(bok_serie_norsk, bok_serie_ej_norsk)
-serie[is.na(serie)] <- 0L
 
 byear_4 <- forlag %>%
   mutate(rowSerie = serie$nsd_row[match(PID, serie$PID)]) %>%
@@ -434,10 +427,10 @@ bok_forlag_norsk <- bok_5 %>%
   ungroup()
 
 bok_forlag_ej_norsk <- bok_5 %>%
-  filter(nsd_row == 0)
+  filter(nsd_row == 0)%>%
+  mutate(nivå = 0)
 
 forlag <- bind_rows(bok_forlag_norsk, bok_forlag_ej_norsk)
-forlag[is.na(forlag)] <- 0L
 
 bok_serie <- bok_5 %>%
   mutate(nsd_index_print = match(SeriesISSN, n_issn$Print.ISSN, nomatch = 0)) %>%
@@ -453,11 +446,10 @@ bok_serie_norsk <- bok_serie_norsk %>%
   ungroup()
 
 bok_serie_ej_norsk <- bok_serie %>%
-  filter(nsd_row == 0) %>%
+  filter(nsd_row == 0)%>%
   mutate(nivå = 0)
 
 serie <- bind_rows(bok_serie_norsk, bok_serie_ej_norsk)
-serie[is.na(serie)] <- 0L
 
 byear_5 <- forlag %>%
   mutate(rowSerie = serie$nsd_row[match(PID, serie$PID)]) %>%
@@ -465,6 +457,7 @@ byear_5 <- forlag %>%
   mutate(nivåMax = (pmax(nivå, nivåSerie)))
 
 bok_alla <- bind_rows(byear_1, byear_2, byear_3, byear_4, byear_5)
+bok_alla$nivåMax[is.na(bok_alla$nivåMax)] <- 0L
 
 index_bok <- bok_alla %>%
   group_by(nivåMax) %>% 

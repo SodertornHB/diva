@@ -1,8 +1,9 @@
 #
 #
 #artiklar_inst
-#180925 GL / 200518 GL / 201119 GL
+#180925 GL / 200518 GL / 201119 GL / 211110 GL
 #Sammanställning av artiklar för en institution. WoS, Scopus, Norska listan och DOAJ.
+#Nivå X införd i Norska listan september 2021
 #
 #
 
@@ -21,16 +22,18 @@ n_issn <- read.csv(file="/home/shub/assets/nsd.issn.csv",
                    na.strings = c("", "NA"),
                    stringsAsFactors = FALSE,
                    encoding = "utf8")
+n_issn$Nivå.2021 <- as.numeric(n_issn$Nivå.2021, "X" = "8")
 
 diva <- read_csv("/home/shub/assets/diva/diva_researchpubl_sh_latest.csv")
-diva <- diva %>% filter(between(Year, 2016, 2021))
+diva <- diva %>% filter(between(Year, 2017, 2021))
 
 diva$JournalISSN[is.na(diva$JournalISSN)] <- 0L
 diva$JournalEISSN[is.na(diva$JournalEISSN)] <- 0L
 diva$FreeFulltext[diva$FreeFulltext == "true"] <- TRUE
 
 #Samtliga pulikationer begränsat till institution och status
-inst_pub <- diva %>% filter_orgs(nmt)
+inst_pub <- diva %>% filter_orgs(sam)
+
 
 #Urval vetenskapliga artiklar , ej submitted
 art <- inst_pub %>%
@@ -52,12 +55,11 @@ ahead <- nrow(subset(art, Status == "aheadofprint"))
 # nsd_kol = vektor som bestämmer vilken kolumn nivåvärdet hämtas från ur norska filerna
 # Omatchade publikationer måste tas bort innan nivån hämtas. Läggs tillbaka efteråt.
 
-year1 <- 2016
-year2 <- 2017
-year3 <- 2018
-year4 <- 2019
-year5 <- 2020
-year6 <- 2021
+year1 <- 2017
+year2 <- 2018
+year3 <- 2019
+year4 <- 2020
+year5 <- 2021
 
 
 art_1 <- art %>%
@@ -157,26 +159,7 @@ art_ej_norsk <- art_5 %>%
 
 year_5 <- bind_rows(art_norsk, art_ej_norsk)
 
-art_6 <- art %>%
-  filter(Year == year6) %>%
-  mutate(nsd_index_print = match(JournalISSN, n_issn$Print.ISSN, nomatch = 0)) %>%
-  mutate(nsd_index_e = match(JournalEISSN, n_issn$Online.ISSN, nomatch = 0)) %>%
-  mutate(nsd_row = pmax(nsd_index_print, nsd_index_e))
-
-nsd_kol <- str_c("Nivå.", year6)
-
-art_norsk <- art_6 %>%
-  filter(nsd_row > 0) %>%
-  rowwise() %>%
-  mutate(nivå = n_issn[[nsd_kol]][[nsd_row]]) %>%
-  ungroup()
-
-art_ej_norsk <- art_6 %>%
-  filter(nsd_row == 0)
-
-year_6 <- bind_rows(art_norsk, art_ej_norsk)
-
-art_alla <- bind_rows(year_1, year_2, year_3, year_4, year_5, year_6)
+art_alla <- bind_rows(year_1, year_2, year_3, year_4, year_5)
 art_alla$ISI[!is.na(art_alla$ISI)] <- 1L
 art_alla$ISI[is.na(art_alla$ISI)] <- 0L
 art_alla$ScopusId[!is.na(art_alla$ScopusId)] <- 1L

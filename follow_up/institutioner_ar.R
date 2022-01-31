@@ -11,15 +11,17 @@ library(tidyverse)
 source('/home/shub/src/common/lib/sh_parameters.R')
 source('/home/shub/src/common/lib/sh_diva_bibliometrics_functions.R')
 
-sh_archive_start("ikl")
+
 
 # Lägg filen från sammaställningen till årsredoviningen i wd
 diva <- read_csv(file="Diva_rådata.csv")
 #diva <- read_csv(file="/home/shub/assets/diva/diva_researchpubl_sh_latest.csv")
-diva <- diva %>% filter(between(Year, 2014, 2020))
+diva <- diva %>% filter(between(Year, 2017, 2021))
 
-#Gör en körning per institution: nmt, sam, hs, ikl, (polisutbildning, lararutbildning)
-inst <- ikl
+sh_archive_start("nmt")
+
+#Gör en körning per institution: nmt, sam, hs, ikl, polis, lararutbildning)
+inst <- nmt
 
 inst_ar <- diva %>% filter_orgs(inst)
 

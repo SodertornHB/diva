@@ -1,28 +1,10 @@
----
-fontsize: 12pt
-geometry: textheight=500pt
-header-includes: 
-  \usepackage{fancyhdr}
-  \usepackage{datetime}
-  \newdateformat{myformat}{\THEYEAR-\twodigit{\THEMONTH}-\twodigit{\THEDAY}}
-  \pagestyle{fancy} 
-  \fancyhf{}
-  \addtolength{\headheight}{4cm}
-  \rhead{Biblioteket, Författare \myformat\today} 
-  \lhead{\includegraphics[width=6cm]{sh_logo.png}}
-  \rfoot{\thepage}
-output:
-  pdf_document:
-    number_section: TRUE
-    latex_engine: xelatex
----
+#
+# oss_annualreport
+# 220121 GL
+# Återrapportering till ÖSS 
+#
 
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-
-```
-```{r, include=FALSE}
 library(tidyverse)
 source('/home/shub/src/common/lib/sh_diva_bibliometrics_functions.R')
 sh_archive_start("ÖSS")
@@ -51,11 +33,11 @@ n_issn <- read.csv(file="/home/shub/assets/nsd.issn.csv",
                    encoding = "utf8")
 
 n_forlag <- read.csv(file="/home/shub/assets/nsd.forlag.csv",
-         header=TRUE,
-         sep=";",
-         na.strings = c("", "NA"),
-         stringsAsFactors = FALSE,
-         encoding = "utf8")
+                     header=TRUE,
+                     sep=";",
+                     na.strings = c("", "NA"),
+                     stringsAsFactors = FALSE,
+                     encoding = "utf8")
 n_forlag$Original.tittel <- recode(n_forlag$Original.tittel, "Södertörns Högskola" = "Södertörns högskola")
 
 #Filtrerar till Östersjöforskning
@@ -64,68 +46,37 @@ ossforsk <- diva %>% filter(baltic == TRUE)
 #De publikationer som skall ingå i sammanställningen
 
 ossforskAR <- ossforsk %>%
-  filter(!(PublicationType == "Samlingsverk (redaktörskap)"|PublicationType == "Proceedings (redaktörskap)"
-           |PublicationType == "Övrigt")) %>%
+  filter(!(PublicationType == "Övrigt")) %>%
   filter(ContentType!="Övrig (populärvetenskap, debatt, mm)") %>%
   filter((is.na(Status))|Status=="published"|Status=="inPress") %>%
   filter(is.na(PublicationSubtype)|PublicationSubtype == "publishedPaper" |PublicationSubtype == "meetingAbstract" 
          |PublicationSubtype == "editorialMaterial")%>%
   mutate(nsd = ((JournalISSN %in% n_issn$`Print.ISSN`)|(JournalEISSN %in% n_issn$`Online.ISSN`)))
 
-```
+ahead <- nrow(subset(ossforsk, Status == "aheadofprint")) 
 
-
-```{r ahead, echo=FALSE}
-#Antal artiklar med status Ahead of print
-ahead <- nrow(subset(ossforsk, Status == "aheadofprint"))
-```
-```{r oss_fund, echo=FALSE}
-oss_fund <- nrow(subset(ossforskAR, oss == TRUE))
-```
-```{r samlingsverk, echo=FALSE}
-samlingsverk <- nrow(subset(ossforsk, (PublicationType == "Samlingsverk (redaktörskap)" 
-|PublicationType == "Proceedings (redaktörskap)")))
-```
-
-
-# Uttag från DiVA till den årligar redovisningen till Östersjöstiftelsen
-Uttaget från Södertörns högskolas pubikationsdatabas DiVA är gjort `r Sys.Date()`
-
-I DiVA har `r oss_fund` publikationer Östersjöstiftelsen markerat som finansiär. I sammanställningen redovisar även de publikationer som också/eller är markerade med forskningsämnet Östersjö- och Östeuropaforskning.
-
-För att endast räkna den vetenskapliga publiceringen med anknytning till högskolan görs ett urval. Publikationerna fraktioneras inte.
-
-Endast publikationer som är publicerade eller *In press* är medräknade. `r ahead` artiklar med status *Epub ahead of print* är inte medräknade.\
-Publikationstyperna för redaktörskap, *Samlingsverk (redaktörskap)* och *Proceedings (redaktörskap)* är inte medräknade. Under året gäller det `r samlingsverk` titlar inom ämnesområdet. Publikationstypen *Övrigt* är inte heller medräknad.
-För *Konferensbidrag* räknas endast *Publiserat paper* (dvs alla andra underkategorier räknas bort).
-
-Tabellen till redovisningen finns i bifogad fil. Här redovisas dels det totala antalet publikationer inom varje kategori, samt hur många av dessa som är refereegranskade.
-
-# Kommentar
-
-
-
-```{r, include=FALSE}
 #Slå ihop publikationstyper genom att byta namn på värden
 ossforskAR$PublicationType <- recode(ossforskAR$PublicationType,
-                                  "Artikel i tidskrift" = "Artikel",
-                                  "Artikel, forskningsöversikt" = "Artikel",
-                                  "Artikel, recension" = "Artikel, recension",
-                                  "Kapitel i bok, del av antologi" = "Kapitel",
-                                  "Bok" = "Monografi",
-                                  "Doktorsavhandling, monografi" = "Doktorsavhandling",
-                                  "Doktorsavhandling, sammanläggning" = "Doktorsavhandling",
-                                  "Konferensbidrag" = "Publicerat konferensbidrag",
-                                  "Licentiatavhandling, monografi" = "Licentiatavhandling",
-                                  "Licentiatavhandling, sammanläggning" = "Licentiatavhandling",
-                                  "Rapport" = "Rapport")
+                                     "Artikel i tidskrift" = "Artikel",
+                                     "Artikel, forskningsöversikt" = "Artikel",
+                                     "Artikel, recension" = "Artikel, recension",
+                                     "Kapitel i bok, del av antologi" = "Kapitel",
+                                     "Bok" = "Monografi",
+                                     "Doktorsavhandling, monografi" = "Doktorsavhandling",
+                                     "Doktorsavhandling, sammanläggning" = "Doktorsavhandling",
+                                     "Konferensbidrag" = "Publicerat konferensbidrag",
+                                     "Licentiatavhandling, monografi" = "Licentiatavhandling",
+                                     "Licentiatavhandling, sammanläggning" = "Licentiatavhandling",
+                                     "Rapport" = "Rapport",
+                                     "Samlingsverk (redaktörskap)" = "Samlingsverk/proceedings, redaktörskap",
+                                     "Proceedings (redaktörskap)" = "Samlingsverk/proceedings, redaktörskap")
 
-#Gör en tabell som skrivs till csv omsorterad
 ossforskAR$PublicationType <- factor(ossforskAR$PublicationType, ordered = TRUE, 
-                                 levels = c("Artikel", "Artikel, recension", "Monografi", "Kapitel", 
-                                 "Publicerat konferensbidrag", "Doktorsavhandling", "Licentiatavhandling","Rapport")) 
+                                     levels = c("Artikel", "Artikel, recension", "Monografi", "Kapitel", 
+                                                "Publicerat konferensbidrag", "Doktorsavhandling", "Licentiatavhandling",
+                                                "Rapport", "Samlingsverk/proceedings, redaktörskap"))
 ossforskAR$ContentType <- factor(ossforskAR$ContentType, ordered = TRUE,
-                             levels = c("Refereegranskat", "Övrigt vetenskapligt"))
+                                 levels = c("Refereegranskat", "Övrigt vetenskapligt"))
 
 oss_table <- ossforskAR %>%
   group_by(PublicationType) %>% 
@@ -145,12 +96,32 @@ oss_table <- left_join(oss_table, oss_ref, "PublicationType")
 
 oss_table[is.na(oss_table)] <- 0L
 
-#Blir double instället för integer.
-#Summera i excel
-#oss_table <- bind_rows(oss_table, colSums(oss_table[2:3]))
 
-```
-```{r, include=FALSE}
+# OSS funding -------------------------------------------------------------
+
+oss_fund <- ossforskAR %>% filter(oss == TRUE)
+
+oss_fund_table <- oss_fund %>%
+  group_by(PublicationType) %>% 
+  count(Year) %>%
+  spread(Year, n)
+
+oss_fund_ref <- oss_fund %>%
+  filter(ContentType == "Refereegranskat") %>%
+  group_by(PublicationType, ContentType) %>%
+  count(Year) %>%
+  spread(Year, n)
+
+oss_fund_ref <- oss_fund_ref %>%
+  spread(ContentType, '2021')
+
+oss_fund_table <- left_join(oss_fund_table, oss_fund_ref, "PublicationType")
+
+oss_fund_table[is.na(oss_fund_table)] <- 0L
+
+
+# Norska listan -----------------------------------------------------------
+
 #Artiklar norska listan
 art <- ossforskAR %>%
   filter(PublicationType == "Artikel" |PublicationType == "Artikel, recension") %>%
@@ -160,7 +131,7 @@ art <- art %>%
   mutate(nsd_index_print = match(JournalISSN, n_issn$Print.ISSN, nomatch = 0)) %>%
   mutate(nsd_index_e = match(JournalEISSN, n_issn$Online.ISSN, nomatch = 0)) %>%
   mutate(nsd_row = pmax(nsd_index_print, nsd_index_e))
-  
+
 nsd_kol <- str_c("Nivå.", y) 
 
 art_norsk <- art %>%
@@ -220,24 +191,16 @@ bok_alla <- forlag %>%
   mutate(rowSerie = serie$nsd_row[match(PID, serie$PID)]) %>%
   mutate(nivåSerie = serie$nivå[match(PID, serie$PID)])%>%
   mutate(nivåMax = (pmax(nivå, nivåSerie)))
-```
 
-```{r, include=FALSE}
-#Spara i excel innan leverans
-write_csv(oss_table, "Underlag_Östersjöstiftelsen.csv")
-sh_archive_resource("Underlag_Östersjöstiftelsen.csv")
+
+# Documentation -----------------------------------------------------------
+
+write_csv(oss_table, "Östersjöforskning.csv")
+write_csv(oss_fund_table, "Östersjöstiftelsen.csv")
+sh_archive_resource("Östersjöforskning.csv")
+sh_archive_resource("Östersjöstiftelsen.csv")
 sh_archive_df(art_alla, "Artiklar_norska")
 sh_archive_df(bok_alla, "Övriga_norska")
 sh_archive_df(ossforskAR, "Medräknade_publikationer")
 sh_archive_df(diva, "Diva_rådata")
 sh_archive_end()
-```
-
-# Bakgrund
-DiVA har använts som publikationsdatabas vid Södertörns högskola sedan 2011 och innehåller publikationer från 2000
-och framåt. Sedan hösten 2011 har det gått att markera andra publikationer än artiklar som refereed. Sedan
-februari 2013 finns underkategorier till publikationstyperna *Artikel i tidskrift* och *Konferensbidrag*.
-
-**Kontaktperson:**\
-Namn, biblioteket\
-epost\
