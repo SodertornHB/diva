@@ -19,28 +19,32 @@ publ_vet <- diva %>%
   
 
 doi_wos <- publ_vet %>%
-  filter(between(Year, 2017, 2021)) %>%
+  filter(between(Year, 2018, 2022)) %>%
   filter(!(is.na(DOI))) %>%
   transmute(wos =str_c("DO=", DOI, " OR "))
-  #transmute(scop = str_c("DOI(", DOI,") OR "))
   
 doi_scopus <- publ_vet %>%
-  filter(between(Year, 2017, 2021)) %>%
+  filter(between(Year, 2018, 2022)) %>%
   filter(!(is.na(DOI))) %>%
   transmute(scop = str_c("DOI(", DOI,") OR "))
 
 doi_unpay_ej_diva <- publ_vet %>%
-  filter(between(Year, 2017, 2021)) %>%
+  filter(between(Year, 2018, 2022)) %>%
   filter(!(is.na(DOI))) %>%
   filter(is.na(FreeFulltext)) %>%
   select(DOI)
 
 doi_unpay_alla <- publ_vet %>%
-  filter(between(Year, 2017, 2021)) %>%
+  filter(between(Year, 2018, 2022)) %>%
   filter(!(is.na(DOI))) %>%
   select(DOI)
+
+urval <- publ_vet %>%
+  filter(between(Year, 2018, 2022))%>%
+  select(PID, DOI, ISI, ScopusId, FullTextLink, FreeFulltext)
 
 write_csv(doi_wos, "wos.csv")
 write_csv(doi_scopus, "scopus.csv")
 write_csv(doi_unpay_ej_diva, "unpay_komplettera.csv")
 write_csv(doi_unpay_alla, "unpay_alla.csv")
+write_csv(urval, "urval.csv")

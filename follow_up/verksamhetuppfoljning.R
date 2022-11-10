@@ -59,7 +59,14 @@ diva_author_urval <- diva_author %>%
   filter(is.na(PublicationSubtype)|PublicationSubtype == "publishedPaper" |PublicationSubtype == "meetingAbstract" 
          |PublicationSubtype == "editorialMaterial"|PublicationSubtype == "letter")
 
+author_ahead <- diva_author %>%
+  filter(ContentType!="Övrig (populärvetenskap, debatt, mm)") %>%
+  filter(PublicationType == "Artikel i tidskrift"|PublicationType == "Artikel, forskningsöversikt"
+         |PublicationType == "Artikel, recension")%>%
+  filter(Status=="aheadofprint")
+
 write_csv(diva_author_urval, "sh_författare.csv")
+write_csv(author_ahead, "sh_författare_ahead.csv")
 
 # ISV ---------------------------------------------------------------------
 inst <- diva_urval %>% filter_orgs(sam)
