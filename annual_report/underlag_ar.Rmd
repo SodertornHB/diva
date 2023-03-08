@@ -8,7 +8,7 @@ header-includes:
   \pagestyle{fancy} 
   \fancyhf{}
   \addtolength{\headheight}{4cm}
-  \rhead{Biblioteket, Författare \myformat\today} 
+  \rhead{Biblioteket, Greta Linder \myformat\today} 
   \lhead{\includegraphics[width=6cm]{sh_logo.png}}
   \rfoot{\thepage}
 output:
@@ -28,7 +28,7 @@ source('/home/shub/src/common/lib/sh_diva_bibliometrics_functions.R')
 sh_archive_start("Årsredovisning")
 #Läs in data från DiVA. Vi använder en csvall2-fil
 diva <- read_csv(file="/home/shub/assets/diva/diva_researchpubl_sh_latest.csv")
-diva <- diva %>% filter(between(Year, 2017, 2021))
+diva <- diva %>% filter(between(Year, 2018, 2022))
 ```
 
 ```{r filter, echo=FALSE}
@@ -62,10 +62,10 @@ För *Konferensbidrag* räknas endast *Publiserat paper* (dvs alla andra underka
 Tabellen till årsredovisningen finns i bifogad fil.
 
 # Avvikelser från föregående år
-
+De korringeringar som gjorts i DiVA under året har inte påverket antalet publikationer jämfört med årsredvisningen 2021.
 
 # Kommentar
-
+Det totala antalet publikationer har minskat. Framför allt gäller det *Artiklar i antologi*. En förklaring är att Södertörns högskolas egen utgivning är mindre än åren 2020-2021.
 
 
 ```{r, include=FALSE}
@@ -126,7 +126,7 @@ oa_art <- divaAR %>%
   count(Year)
  
 oa_art_table <- full_join(art_ref, oa_art, by = "Year")
-names(oa_art_table) <- c("Year", "articles", "oa_articles")
+names(oa_art_table) <- c("Year", "ref_articles", "oa_articles")
 
 ```
 
@@ -148,6 +148,6 @@ februari 2013 finns underkategorier till publikationstyperna *Artikel i tidskrif
 
 
 **Kontaktperson:**\ 
-Namn, biblioteket\
-e-post\
+Greta Linder, biblioteket\
+greta.linder@sh.se\
 

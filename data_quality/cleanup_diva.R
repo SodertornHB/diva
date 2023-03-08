@@ -37,9 +37,9 @@ sort(ahead_of_print$PID)
 # Ej granskningsmärkta ----------------------------------------------------
 #Poster som är markerade som ej granskade, trots att de inte ligger i granskningen.
 #Ger en csv-fil med PID och titel.
-not_reviewed <- diva %>% filter(Reviewed == "false")
+not_reviewed <- diva %>% filter(Reviewed == "FALSE")
 not_reviewed <- not_reviewed %>% select(PID, Title)
-write_csv(not_reviewed, "Ej granskningsmärkta")
+write_csv(not_reviewed, "Ej granskningsmärkta.csv")
 
 
 # Manuskript i sammanläggningsavhandlingar --------------------------------

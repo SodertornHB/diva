@@ -3,14 +3,15 @@
 # 220121 GL
 # Återrapportering till ÖSS 
 #
+# OBS Övriga publikationer norska listan måste rättas. NA gör att pmax inte fungerar.
 
 
 library(tidyverse)
 source('/home/shub/src/common/lib/sh_diva_bibliometrics_functions.R')
 sh_archive_start("ÖSS")
 
-#Välj år även rad 142
-y <- 2021
+#Välj år även rad 93, 116
+y <- 2022
 
 #Läs in data från DiVA. Vi använder en csvall2-fil
 diva <- read_csv(file="/home/shub/assets/diva/diva_researchpubl_sh_latest.csv")
@@ -90,7 +91,7 @@ oss_ref <- ossforskAR %>%
   spread(Year, n)
 
 oss_ref <- oss_ref %>%
-  spread(ContentType, '2021')
+  spread(ContentType, '2022')
 
 oss_table <- left_join(oss_table, oss_ref, "PublicationType")
 
@@ -113,7 +114,7 @@ oss_fund_ref <- oss_fund %>%
   spread(Year, n)
 
 oss_fund_ref <- oss_fund_ref %>%
-  spread(ContentType, '2021')
+  spread(ContentType, '2022')
 
 oss_fund_table <- left_join(oss_fund_table, oss_fund_ref, "PublicationType")
 
