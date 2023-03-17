@@ -3,7 +3,7 @@
 # GL 211021
 # Skapar en fil med DOI i format som går att kopiera till Scopus och WoS avancerade sökning.
 # För att se om alla publikationer är knutna till Södertörn University i databaserna.
-# Lista till Unpaywall dels samtliga, dels de som saknar länt till fri fulltext i DiVA.
+# Lista till Unpaywall dels samtliga, dels de som saknar länk till fri fulltext i DiVA.
 #
 #
 
