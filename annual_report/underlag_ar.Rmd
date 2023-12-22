@@ -28,7 +28,7 @@ source('/home/shub/src/common/lib/sh_diva_bibliometrics_functions.R')
 sh_archive_start("Årsredovisning")
 #Läs in data från DiVA. Vi använder en csvall2-fil
 diva <- read_csv(file="/home/shub/assets/diva/diva_researchpubl_sh_latest.csv")
-diva <- diva %>% filter(between(Year, 2018, 2022))
+diva <- diva %>% filter(between(Year, 2019, 2023))
 ```
 
 ```{r filter, echo=FALSE}
@@ -50,7 +50,7 @@ ahead <- nrow(subset(diva, Status == "aheadofprint"))
 rev <- nrow(subset(divaAR, Reviewed =="FALSE"))
 ```
 # Underlag från DiVA till årsredovisningen
-Uttaget från Södertörns högskolas pubikationsdatabas DiVA är gjort `r Sys.Date()` Antalet publikationer är uppdaterat för samtliga år.
+Uttaget från Södertörns högskolas pubikationsdatabas DiVA är gjort `r Sys.Date()`. Antalet publikationer är uppdaterat för samtliga år.
 
 För att endast räkna den vetenskapliga publiceringen med anknytning till högskolan görs ett urval. Publikationerna fraktioneras inte.
 
@@ -62,7 +62,7 @@ För *Konferensbidrag* räknas endast *Publiserat paper* (dvs alla andra underka
 Tabellen till årsredovisningen finns i bifogad fil.
 
 # Avvikelser från föregående år
-De korringeringar som gjorts i DiVA under året har inte påverket antalet publikationer jämfört med årsredvisningen 2021.
+De korringeringar som gjorts i DiVA under året har inte påverket antalet publikationer jämfört med årsredvisningen 2022.
 
 # Kommentar
 Det totala antalet publikationer har minskat. Framför allt gäller det *Artiklar i antologi*. En förklaring är att Södertörns högskolas egen utgivning är mindre än åren 2020-2021.
@@ -109,43 +109,15 @@ ar_table <- ar_table[c(1,6,5,4,3,2)]
 ar_table[is.na(ar_table)] <- 0L
 
 ```
-```{r, include=FALSE}
-#Antal OA Artiklar i tidskrift
-art_ref <- divaAR %>%
-  filter(PublicationType == "Artiklar i tidskrift") %>%
-  filter(ContentType =="Refereegranskat") %>%
-  group_by (Year) %>%
-  count(Year) %>%
-  select(Year, n) %>%
-  arrange(Year)
-
-oa_art <- divaAR %>%
-  filter(PublicationType == "Artiklar i tidskrift") %>%
-  filter(ContentType =="Refereegranskat") %>%
-  filter(FreeFulltext == TRUE | (!(is.na(FullTextLink)))) %>%
-  count(Year)
- 
-oa_art_table <- full_join(art_ref, oa_art, by = "Year")
-names(oa_art_table) <- c("Year", "ref_articles", "oa_articles")
-
-```
 
 ```{r, include=FALSE}
 #Spara i excel innan leverans
 write_csv(ar_table, "Underlag_årsredovisning.csv")
-write_csv(oa_art_table, "Artiklar_OA.csv")
 sh_archive_resource("Underlag_årsredovisning.csv")
-sh_archive_resource("Artiklar_OA.csv")
 sh_archive_df(divaAR, "Medräknade_publikationer")
 sh_archive_df(diva, "Diva_rådata")
 sh_archive_end()
 ```
-
-# Bakgrund
-DiVA har använts som publikationsdatabas vid Södertörns högskola sedan 2011 och innehåller publikationer från 2000
-och framåt. Sedan hösten 2011 har det gått att markera andra publikationer än artiklar som refereed. Sedan
-februari 2013 finns underkategorier till publikationstyperna *Artikel i tidskrift* och *Konferensbidrag*.
-
 
 **Kontaktperson:**\ 
 Greta Linder, biblioteket\
