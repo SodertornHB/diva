@@ -19,28 +19,28 @@ publ_vet <- diva %>%
   
 
 doi_wos <- publ_vet %>%
-  filter(between(Year, 2018, 2022)) %>%
+  filter(between(Year, 2019, 2023)) %>%
   filter(!(is.na(DOI))) %>%
   transmute(wos =str_c("DO=", DOI, " OR "))
   
 doi_scopus <- publ_vet %>%
-  filter(between(Year, 2018, 2022)) %>%
+  filter(between(Year, 2019, 2023)) %>%
   filter(!(is.na(DOI))) %>%
   transmute(scop = str_c("DOI(", DOI,") OR "))
 
 doi_unpay_ej_diva <- publ_vet %>%
-  filter(between(Year, 2018, 2022)) %>%
+  filter(between(Year, 2019, 2023)) %>%
   filter(!(is.na(DOI))) %>%
   filter(is.na(FreeFulltext)) %>%
   select(DOI)
 
 doi_unpay_alla <- publ_vet %>%
-  filter(between(Year, 2018, 2022)) %>%
+  filter(between(Year, 2019, 2023)) %>%
   filter(!(is.na(DOI))) %>%
   select(DOI)
 
 urval <- publ_vet %>%
-  filter(between(Year, 2018, 2022))%>%
+  filter(between(Year, 2019, 2023))%>%
   select(PID, DOI, ISI, ScopusId, FullTextLink, FreeFulltext)
 
 write_csv(doi_wos, "wos.csv")

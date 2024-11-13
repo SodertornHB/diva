@@ -26,10 +26,10 @@ n_issn <- read.csv(file="/home/shub/assets/nsd.issn.csv",
 #n_issn$Nivå.2022 <- as.numeric(n_issn$Nivå.2022, "X" = "8")
 
 diva <- read_csv("/home/shub/assets/diva/diva_researchpubl_sh_latest.csv")
-diva <- diva %>% filter(between(Year, 2018, 2022))
+diva <- diva %>% filter(between(Year, 2020, 2024))
 
 diva_author <- read_csv(file="/home/shub/assets/diva/diva_author_sh_latest.csv")
-diva_author <- diva_author %>% filter(between(Year, 2018, 2022))
+diva_author <- diva_author %>% filter(between(Year, 2020, 2024))
 
 diva$JournalISSN[is.na(diva$JournalISSN)] <- 0L
 diva$JournalEISSN[is.na(diva$JournalEISSN)] <- 0L
@@ -79,11 +79,11 @@ art_author <- inst_pub_author %>%
 # nsd_kol = vektor som bestämmer vilken kolumn nivåvärdet hämtas från ur norska filerna
 # Omatchade publikationer måste tas bort innan nivån hämtas. Läggs tillbaka efteråt.
 
-year1 <- 2018
-year2 <- 2019
-year3 <- 2020
-year4 <- 2021
-year5 <- 2022
+year1 <- 2020
+year2 <- 2021
+year3 <- 2022
+year4 <- 2023
+year5 <- 2024
 
 
 art_1 <- art %>%

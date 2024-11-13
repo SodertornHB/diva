@@ -1,7 +1,7 @@
 #
 # Andel OA
-# 220506 GL
-# Underlag för att se hur mycket av SH-affilierade publikationer som publiceras OA
+# 220506 GL / 240520GL
+# Underlag för att se hur mycket av SH-affilierade publikationer som publiceras OA.
 # 
 #
 #
@@ -11,7 +11,7 @@ library(tidyverse)
 source('/home/shub/src/common/lib/sh_diva_bibliometrics_functions.R')
 
 diva <- read_csv(file="/home/shub/assets/diva/diva_researchpubl_sh_latest.csv")
-diva <- diva %>% filter(between(Year, 2017, 2021))
+diva <- diva %>% filter(between(Year, 2019, 2023))
 
 doaj_listan <- read_csv("/home/shub/assets/doaj.csv")
 
@@ -26,6 +26,12 @@ diva_urval <- diva %>%
   filter(ContentType!="Övrig (populärvetenskap, debatt, mm)") %>%
   filter((is.na(Status))|Status=="published"|Status=="inPress"|Status=="aheadofprint")
 
+diva_confpaper <- diva %>%
+  filter(PublicationType == "Konferensbidrag")%>%
+  filter(ContentType != "Övrig (populärvetenskap, debatt, mm)")%>%
+  filter(PublicationSubtype == "publishedPaper")
+
+diva_urval <- bind_rows(diva_urval, diva_confpaper)
 
 # DOI ---------------------------------------------------------------------
 # Ta ut lista från Unpaywall för att matcha i excel

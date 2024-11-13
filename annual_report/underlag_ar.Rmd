@@ -8,7 +8,7 @@ header-includes:
   \pagestyle{fancy} 
   \fancyhf{}
   \addtolength{\headheight}{4cm}
-  \rhead{Biblioteket, Greta Linder \myformat\today} 
+  \rhead{Biblioteket, Författare \myformat\today} 
   \lhead{\includegraphics[width=6cm]{sh_logo.png}}
   \rfoot{\thepage}
 output:
@@ -28,7 +28,7 @@ source('/home/shub/src/common/lib/sh_diva_bibliometrics_functions.R')
 sh_archive_start("Årsredovisning")
 #Läs in data från DiVA. Vi använder en csvall2-fil
 diva <- read_csv(file="/home/shub/assets/diva/diva_researchpubl_sh_latest.csv")
-diva <- diva %>% filter(between(Year, 2019, 2023))
+diva <- diva %>% filter(between(Year, 2020, 2024))
 ```
 
 ```{r filter, echo=FALSE}
@@ -62,10 +62,10 @@ För *Konferensbidrag* räknas endast *Publiserat paper* (dvs alla andra underka
 Tabellen till årsredovisningen finns i bifogad fil.
 
 # Avvikelser från föregående år
-De korringeringar som gjorts i DiVA under året har inte påverket antalet publikationer jämfört med årsredvisningen 2022.
+
 
 # Kommentar
-Det totala antalet publikationer har minskat. Framför allt gäller det *Artiklar i antologi*. En förklaring är att Södertörns högskolas egen utgivning är mindre än åren 2020-2021.
+ 
 
 
 ```{r, include=FALSE}
@@ -120,6 +120,6 @@ sh_archive_end()
 ```
 
 **Kontaktperson:**\ 
-Greta Linder, biblioteket\
-greta.linder@sh.se\
+Namn, biblioteket\
+e-post\
 

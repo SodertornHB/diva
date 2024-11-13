@@ -16,13 +16,12 @@ source('/home/shub/src/common/lib/sh_diva_bibliometrics_functions.R')
 # Lägg filen från sammaställningen till årsredoviningen i wd
 diva <- read_csv(file="Diva_rådata.csv")
 #diva <- read_csv(file="/home/shub/assets/diva/diva_researchpubl_sh_latest.csv")
-diva <- diva %>% filter(between(Year, 2018, 2022))
+diva <- diva %>% filter(between(Year, 2019, 2023))
 
 sh_archive_start("lararinst")
 
 #Gör en körning per institution: nmt, sam, hs, ikl, polis, lararinst
 inst <- lararinst
-
 inst_ar <- diva %>% filter_orgs(inst)
 
 #De publikationer som skall ingå i sammanställningen
