@@ -3,7 +3,7 @@
 # 220121 GL / 240117 GL
 # Återrapportering till ÖSS 
 #
-# Åtgärdas Få in dataset i tabell, har inte rätt innehållstyp.
+# 
 
 
 library(tidyverse)
@@ -11,7 +11,7 @@ source('/home/shub/src/common/lib/sh_diva_bibliometrics_functions.R')
 sh_archive_start("ÖSS")
 
 #Välj år även rad 70, 94
-y <- 2023
+y <- 2024
 
 #Läs in data från DiVA. Vi använder en csvall2-fil
 diva <- read_csv(file="/home/shub/assets/diva/diva_researchpubl_sh_latest.csv")
@@ -70,7 +70,7 @@ oss_ref <- ossforskAR %>%
   spread(Year, n)
 
 oss_ref <- oss_ref %>%
-  spread(ContentType, '2023')
+  spread(ContentType, '2024')
 
 oss_oa <- ossforskAR %>%
   group_by(PublicationType) %>%
@@ -104,7 +104,7 @@ oss_fund_ref <- oss_fund %>%
   spread(Year, n)
 
 oss_fund_ref <- oss_fund_ref %>%
-  spread(ContentType, '2023')
+  spread(ContentType, '2024')
 
 oss_fund_oa <- oss_fund %>%
   group_by(PublicationType) %>%
