@@ -1,6 +1,6 @@
 #
 # intitution_ar
-# 190116 GL
+# 190116 GL / 250116 GL
 # Underlaget till årsredovisningen uppdelat på institution.
 #
 #
@@ -16,12 +16,12 @@ source('/home/shub/src/common/lib/sh_diva_bibliometrics_functions.R')
 # Lägg filen från sammaställningen till årsredoviningen i wd
 diva <- read_csv(file="Diva_rådata.csv")
 #diva <- read_csv(file="/home/shub/assets/diva/diva_researchpubl_sh_latest.csv")
-diva <- diva %>% filter(between(Year, 2019, 2023))
+diva <- diva %>% filter(between(Year, 2020, 2024))
 
-sh_archive_start("lararinst")
+sh_archive_start("ikl_2")
 
 #Gör en körning per institution: nmt, sam, hs, ikl, polis, lararinst
-inst <- lararinst
+inst <- ikl
 inst_ar <- diva %>% filter_orgs(inst)
 
 #De publikationer som skall ingå i sammanställningen
@@ -46,6 +46,10 @@ divaAR$PublicationType <- recode(divaAR$PublicationType,
                                  "Konferensbidrag" = "Publicerade konferensbidrag",
                                  "Rapport" = "Rapporter")
 
+divaAR$ContentType <- recode(divaAR$ContentType,
+                             "Refereegranskat" = "Sakkunniggranskade",
+                             "Övrigt vetenskapligt" = "Vetenskapliga, ej sakkunniggranskade")
+
 
 #Gör en tabell som skrivs till csv omsorterad och med innhållstyp för artiklar
 divaAR$PublicationType <- factor(divaAR$PublicationType, ordered = TRUE, 
@@ -53,7 +57,7 @@ divaAR$PublicationType <- factor(divaAR$PublicationType, ordered = TRUE,
                                             "Doktorsavhandlingar", "Licentiatavhandlingar", "Rapporter"))
 
 divaAR$ContentType <- factor(divaAR$ContentType, ordered = TRUE,
-                             levels = c("Refereegranskat", "Övrigt vetenskapligt"))
+                             levels = c("Sakkunniggranskade", "Vetenskapliga, ej sakkunniggranskade"))
 
 
 articles <- divaAR %>%

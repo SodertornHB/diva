@@ -8,7 +8,7 @@ header-includes:
   \pagestyle{fancy} 
   \fancyhf{}
   \addtolength{\headheight}{4cm}
-  \rhead{Biblioteket, Författare \myformat\today} 
+  \rhead{Biblioteket \myformat\today} 
   \lhead{\includegraphics[width=6cm]{sh_logo.png}}
   \rfoot{\thepage}
 output:
@@ -64,8 +64,9 @@ Tabellen till årsredovisningen finns i bifogad fil.
 # Avvikelser från föregående år
 
 
+
 # Kommentar
- 
+
 
 
 ```{r, include=FALSE}
@@ -82,6 +83,9 @@ divaAR$PublicationType <- recode(divaAR$PublicationType,
                                         "Bok" = "Monografier",
                                         "Konferensbidrag" = "Publicerade konferensbidrag",
                                         "Rapport" = "Rapporter")
+divaAR$ContentType <- recode(divaAR$ContentType,
+                             "Refereegranskat" = "Sakkunniggranskade",
+                             "Övrigt vetenskapligt" = "Vetenskapliga, ej sakkunniggranskade")
 
 
 #Gör en tabell som skrivs till csv omsorterad och med innhållstyp för artiklar
@@ -89,7 +93,7 @@ divaAR$PublicationType <- factor(divaAR$PublicationType, ordered = TRUE,
                                  levels = c("Artiklar i tidskrift", "Artiklar i antologi", "Monografier", "Publicerade konferensbidrag", 
                                             "Doktorsavhandlingar", "Licentiatavhandlingar", "Rapporter"))
 divaAR$ContentType <- factor(divaAR$ContentType, ordered = TRUE,
-                             levels = c("Refereegranskat", "Övrigt vetenskapligt"))
+                             levels = c("Sakkunniggranskade", "Vetenskapliga, ej sakkunniggranskade"))
 
 articles <- divaAR %>%
   subset(PublicationType=="Artiklar i tidskrift"|PublicationType=="Artiklar i antologi") %>%
@@ -111,9 +115,36 @@ ar_table[is.na(ar_table)] <- 0L
 ```
 
 ```{r, include=FALSE}
+# OA antal till tabell ----------------------------------------------------
+diva_oa <- divaAR %>%
+  filter(FreeFulltext == TRUE | (!(is.na(FullTextLink))))
+
+articles_oa <- diva_oa %>%
+  subset(PublicationType=="Artiklar i tidskrift"|PublicationType=="Artiklar i antologi") %>%
+  group_by(PublicationType,ContentType) %>% 
+  count(Year) %>%
+  spread(Year, n)%>%
+  unite(PublicationType, PublicationType, ContentType, sep=": ")
+
+other_publication_oa <- diva_oa %>%
+  subset(!(PublicationType=="Artiklar i tidskrift"|PublicationType=="Artiklar i antologi")) %>%
+  group_by(PublicationType) %>% 
+  count(Year) %>%
+  spread(Year, n)
+
+oa_table <- bind_rows(articles_oa, other_publication_oa)
+oa_table <- oa_table[c(1,6,5,4,3,2)] %>%
+  rename("Publicering med öppen tillgång" = PublicationType)
+oa_table[is.na(oa_table)] <- 0L
+
+```
+
+```{r, include=FALSE}
 #Spara i excel innan leverans
 write_csv(ar_table, "Underlag_årsredovisning.csv")
 sh_archive_resource("Underlag_årsredovisning.csv")
+write.csv(oa_table, "OA_underlag_årsredovisningen.csv")
+sh_archive_resource("OA_underlag_årsredovisningen.csv")
 sh_archive_df(divaAR, "Medräknade_publikationer")
 sh_archive_df(diva, "Diva_rådata")
 sh_archive_end()
@@ -121,5 +152,5 @@ sh_archive_end()
 
 **Kontaktperson:**\ 
 Namn, biblioteket\
-e-post\
+xx@sh.se\
 

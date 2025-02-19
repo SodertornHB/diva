@@ -12,7 +12,7 @@ library(tidyverse)
 
 source('/home/shub/src/common/lib/sh_diva_bibliometrics_functions.R')
 diva <- read_csv(file="/home/shub/assets/diva/diva_researchpubl_sh_latest.csv")
-diva <- diva %>% filter(between(Year, 2019, 2023))
+diva <- diva %>% filter(between(Year, 2020, 2024))
 
 divaAR <- diva %>% 
   filter(!(PublicationType == "Samlingsverk (redaktörskap)"|PublicationType == "Proceedings (redaktörskap)" |PublicationType == "Övrigt")) %>%
@@ -84,3 +84,4 @@ oa_table <- oa_table[c(1,6,5,4,3,2)] %>%
 oa_table[is.na(oa_table)] <- 0L
 
 write.csv(oa_table, "oa.csv")
+
