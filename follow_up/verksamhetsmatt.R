@@ -14,7 +14,7 @@ source('/home/shub/src/common/lib/sh_diva_bibliometrics_functions.R')
 sh_archive_start("Verksamhetsmått")
 
 diva <- read_csv(file="/home/shub/assets/diva/diva_researchpubl_sh_latest.csv")
-diva <- diva %>% filter(between(Year, 2019, 2023))
+diva <- diva %>% filter(between(Year, 2020, 2024))
 
 diva_urval <- diva %>% 
   filter(!(PublicationType == "Övrigt" |PublicationType == "Manuskript")) %>%
@@ -313,3 +313,4 @@ sh_archive_resource("lararinst_publikationer_tabell.csv")
 sh_archive_resource("lararinst_artiklar_ahead.csv")
 
 sh_archive_end()
+

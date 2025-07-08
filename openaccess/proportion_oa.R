@@ -11,7 +11,7 @@ library(tidyverse)
 source('/home/shub/src/common/lib/sh_diva_bibliometrics_functions.R')
 
 diva <- read_csv(file="/home/shub/assets/diva/diva_researchpubl_sh_latest.csv")
-diva <- diva %>% filter(between(Year, 2019, 2023))
+diva <- diva %>% filter(between(Year, 2024,2024))
 
 doaj_listan <- read_csv("/home/shub/assets/doaj.csv")
 

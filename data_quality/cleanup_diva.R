@@ -86,5 +86,5 @@ missing_orcid <- id_all %>%
   filter(!(is.na(Id))) %>%
   filter(is.na(Orcid)) %>%
   inner_join(id_master, "Id") %>%
-  write_csv("Uppdatera orcid")
+  write_csv("Uppdatera orcid.csv")
 
